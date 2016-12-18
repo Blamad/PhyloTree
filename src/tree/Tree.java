@@ -1,5 +1,7 @@
 package tree;
 
+import tree.exporter.Leaf;
+
 import java.util.Set;
 
 /**
@@ -26,17 +28,18 @@ public class Tree {
 
     private void processNode(Node node, Integer depth)
     {
-        Set<Node> children = node.getChildren();
-        if(children.isEmpty())
+        if(node instanceof Leaf)
         {
+            Leaf leaf = (Leaf) node;
             String result = "";
             while(--depth > 0)
                 result += "\t";
-            result += node.getName();
+            result += leaf.getName();
             System.out.println(result);
+            return;
         }
 
-        for(Node childNode : children)
+        for(Node childNode : node.getChildren())
         {
             processNode(childNode, depth+1);
         }

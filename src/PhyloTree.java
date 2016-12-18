@@ -11,7 +11,6 @@ import utils.PhyloTreeException;
 
 import java.io.StringReader;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,14 +18,11 @@ import java.util.logging.Logger;
  11. „Kalkulator” drzew filogenetycznych ukorzenionych. Typ A.
  Drzewa wczytywane są z pliku tekstowego (można użyć jakiegoś gotowego parsera np. formatu NEWICK).
  Operacje:
- -  konwersja reprezentacji „rodzina zgodnych klastrów” ⇔ drzewo jako graf z jakąś jego wizualizacją (oraz test poprawności danych tj. „czy podana rodzina była zgodna?”).
+ -  konwersja reprezentacji „rodzina zgodnych klastrów” ⇔ drzewo jako graf z jakąś jego wizualizacją (oraz importTreeAndWriteOut poprawności danych tj. „czy podana rodzina była zgodna?”).
  -  Wyznaczanie odległości topologicznej RF między parą drzew, drzewa konsensusu (o podanym poziomie procentowym) dla zadanego zbioru drzew
  oraz jej wspólne rozszerzenie (jeśli takie istnieje).
  - Obcięcie podanego drzewa do drzewa filogenetycznego do zadanego podzbioru liści.
  */
-
-//http://stackoverflow.com/questions/39153587/annotating-tree-nodes-with-data-for-analysis-with-the-java-evolutionary-biology - jebl
-//http://stackoverflow.com/questions/3891041/java-library-or-code-to-parse-newick-format - Archaeopteryx
 
 public class PhyloTree {
 
@@ -40,15 +36,13 @@ public class PhyloTree {
     public void run()
     {
         String newick = "(Ssak,(Żółw,Płaszczka,(Żaba,Salamandra)));";
-        test2(newick);
+        importTreeAndWriteOut(newick);
 
-        test(newick);
-
-        //Narysuj.
+        //wypiszNaSurowo(newick);
         //new Forester(newick).drawTree();
     }
 
-    private void test(String newick)
+    private void importTreeAndWriteOut(String newick)
     {
         Tree tree = null;
 
@@ -64,7 +58,7 @@ public class PhyloTree {
         tree.printTreeToConsole();
     }
 
-    private void test2(String newick) {
+    private void wypiszNaSurowo(String newick) {
         StringReader sr = new StringReader(newick);
         NewickImporter ni = new NewickImporter(sr, true);
 

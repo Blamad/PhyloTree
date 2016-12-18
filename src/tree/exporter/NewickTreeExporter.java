@@ -42,6 +42,18 @@ public class NewickTreeExporter {
 
     private static tree.Node createNode(SimpleRootedTree srt, Node node)
     {
+        Double distance = null;
+
+        try {
+            if (srt.getParent(node) != null)
+                distance = srt.getEdgeLength(srt.getParent(node), node);
+        } catch (Graph.NoEdgeException e) { }
+
+        return new tree.Node(distance);
+    }
+
+    private static Leaf createLeaf(SimpleRootedTree srt, Node node)
+    {
         String name = null;
         Double distance = null;
 
@@ -52,47 +64,24 @@ public class NewickTreeExporter {
                 distance = srt.getEdgeLength(srt.getParent(node), node);
         } catch (Graph.NoEdgeException e) { }
 
-        return new tree.Node(name, distance);
+        return new Leaf(name, distance);
     }
 
     private static void populateTree(SimpleRootedTree srt, Node node, tree.Node parentNode)
     {
         List<Node> children = srt.getChildren(node);
-        tree.Node childNode = createNode(srt, node);
-        parentNode.addChild(createNode(srt, node));
+        tree.Node childNode = null;
+
+        if(children.isEmpty())
+            childNode = createLeaf(srt, node);
+        else
+            childNode = createNode(srt, node);
+
+        parentNode.addChild(childNode);
 
         for(Node child : children)
         {
             populateTree(srt, child, childNode);
-        }
-    }
-
-    private void test2(String newick) {
-        StringReader sr = new StringReader(newick);
-        NewickImporter ni = new NewickImporter(sr, true);
-
-        try {
-            SimpleRootedTree srt = (SimpleRootedTree) ni.importNextTree();
-            Node rootNode = srt.getRootNode();
-            processNode(srt, rootNode, 0);
-        } catch (Exception e) { }
-    }
-
-    private void processNode(SimpleRootedTree srt, Node node, Integer depth)
-    {
-        List<Node> children = srt.getChildren(node);
-        if(children.isEmpty())
-        {
-            String result = "";
-            while(--depth > 0)
-                result += "\t";
-            result += srt.getTaxon(node);
-            System.out.println(result);
-        }
-
-        for(Node childNode : children)
-        {
-            processNode(srt, childNode, depth+1);
         }
     }
 }

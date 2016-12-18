@@ -8,15 +8,13 @@ import java.util.Set;
  */
 public class Node {
 
-    private Double distanceToParent;
-    private String name;
+    protected Double distanceToParent;
 
     private Node parent;
     private Set<Node> listOfChildren = new HashSet();
 
-    public Node(String name, Double distanceToParent)
+    public Node(Double distanceToParent)
     {
-        this.name = name;
         this.distanceToParent = distanceToParent;
     }
 
@@ -37,11 +35,6 @@ public class Node {
     public Double getDistanceToParent()
     {
         return distanceToParent;
-    }
-
-    public String getName()
-    {
-        return name;
     }
 
     public Set<Node> getChildren()
