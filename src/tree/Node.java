@@ -38,6 +38,11 @@ public class Node implements Comparable<Node>{
         return distanceToParent;
     }
 
+    public void setDistanceToParent(Double distance)
+    {
+        this.distanceToParent = distance;
+    }
+
     public List<Node> getChildren()
     {
         return listOfChildren;
