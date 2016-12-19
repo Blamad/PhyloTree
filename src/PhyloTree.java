@@ -4,7 +4,7 @@
 
 import forester.Forester;
 import tree.Tree;
-import tree.TreeUtils;
+import tree.utils.TreeUtils;
 import tree.exporter.NewickTreeExporter;
 import utils.PhyloTreeException;
 
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -145,6 +144,9 @@ public class PhyloTree {
                     loadFromFile("res/tree_3.txt");
                     break;
                 case 4:
+                    loadFromFile("res/tree_4.txt");
+                    break;
+                case 5:
                     loadFromFile("res/tree_zyciowe.txt");
                     break;
                 default:

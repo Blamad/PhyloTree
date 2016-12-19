@@ -1,4 +1,8 @@
-package tree;
+package tree.utils;
+
+import tree.Leaf;
+import tree.Node;
+import tree.Tree;
 
 import java.util.List;
 
@@ -29,8 +33,7 @@ public class TreeUtils {
         Tree prunedTree = new Tree(newRoot);
 
         pruneTree(tree.getRootNode(), newRoot, leaves);
-        //TODO to jeszcze nie dziala. Ale bedzie
-        //cleanUpStructure(newRoot);
+        cleanUpStructure(newRoot);
 
         return prunedTree;
     }
@@ -41,28 +44,44 @@ public class TreeUtils {
         if(node instanceof Leaf)
             return;
 
-        //Wiszaca galaz
-        if(node.getChildren().size() == 0 && node.getParent() != null)
-        {
-            node.getParent().getChildren().remove(node);
-            cleanUpStructure(node.getParent());
-        } else
+        Node parent = node.getParent();
+        //Skoro to nie jest lisc to sprawdzamy jak można to uporządkować. Chcemy usunąć:
+
+        //Wiszaca galaz, sama sie odpina.
+        if(node.getChildren().size() == 0 && parent != null) {
+            parent.getChildren().remove(node);
+
+            node.setParent(null);
+            cleanUpStructure(parent);
+            return;
+        }
+
         //Galaz przedluzajaca (jedyny potomek rodzica i z pojedynczym dzickiem po drugiej stronie
-        if(node.getChildren().size() == 1 && node.getParent() != null && node.getParent().getChildren().size() == 1)
+        if(node.getChildren().size() == 1 && parent != null && parent.getChildren().size() == 1)
         {
             Node onlyChild = node.getChildren().get(0);
             onlyChild.setDistanceToParent(onlyChild.getDistanceToParent() + node.getDistanceToParent());
-
             //Wyciagniecie ze struktury zbednego wezla
-            node.getParent().getChildren().clear();
-            node.getParent().getChildren().add(onlyChild);
-            onlyChild.setParent(node.getParent());
+            parent.getChildren().clear();
+            parent.getChildren().add(onlyChild);
+            onlyChild.setParent(parent);
+
             node.setParent(null);
+            cleanUpStructure(parent);
+            return;
         }
 
-        for(Node child : node.getChildren())
+        //Czemu tak? Bo przez rekursje nasza lista może się zmieniać w trakcie pętli.
+        //Java tego nie lubi więc trzeba to jakoś obejść i mądrze obsłużyć.
+        //Nad mądrością rozwiązania mozna polemizować.. Ale działa.
+        List<Node> childrenList = node.getChildren();
+        for(int i = 0; i < childrenList.size(); i++)
         {
-            cleanUpStructure(child);
+            Integer sizeBefore = childrenList.size();
+            cleanUpStructure(childrenList.get(i));
+
+            if(childrenList.size() != sizeBefore)
+                i--;
         }
     }
 
@@ -72,7 +91,7 @@ public class TreeUtils {
 
             //Jezeli wpadlismy na lisc do usuniecia to go nie kopiujemy
             if (child instanceof Leaf && !leaves.contains(((Leaf) child).getName()))
-                return;
+                continue;
             else {
                 Node newNode = child.clone();
                 copy.addChild(newNode);
