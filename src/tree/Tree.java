@@ -5,7 +5,6 @@ import tree.exporter.Leaf;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Blamad on 18.12.2016.
@@ -31,22 +30,22 @@ public class Tree {
 
     private void processNode(Node node, Integer depth)
     {
+        String result = "";
+        for(int d = depth; d > 0; d--)
+            result += "\t";
+
         if(node instanceof Leaf)
         {
             Leaf leaf = (Leaf) node;
-            String result = "";
-            while(--depth > 0)
-                result += "\t";
             result += leaf.getName();
-            System.out.println(result);
-            return;
         }
+        else
+            result += "+";
 
-        List<Node> listOfChildren = new ArrayList();
-        listOfChildren.addAll(node.getChildren());
-        Collections.sort(listOfChildren);
+        System.out.println(result);
 
-        for(Node childNode : listOfChildren)
+        Collections.sort(node.getChildren());
+        for(Node childNode : node.getChildren())
         {
             processNode(childNode, depth+1);
         }

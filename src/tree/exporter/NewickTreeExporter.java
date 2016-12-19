@@ -28,8 +28,10 @@ public class NewickTreeExporter {
             SimpleRootedTree srt = (SimpleRootedTree) ni.importNextTree();
             Node rootNode = srt.getRootNode();
 
-            tree = new Tree(createNode(srt, rootNode, false));
-            populateTree(srt, rootNode, tree.getRootNode());
+            tree.Node treeRootNode = createNode(srt, rootNode, false);
+            populateTree(srt, rootNode, treeRootNode);
+
+            tree = new Tree(treeRootNode.getChildren().get(0));
 
         } catch (IOException e) {
             throw new PhyloTreeException("Padam bo mogę.");

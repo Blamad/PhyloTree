@@ -20,4 +20,13 @@ public class Leaf extends Node {
         return name;
     }
 
+    @Override
+    public int compareTo(Node o) {
+        if (this instanceof Leaf)
+            return -1;
+        if (o instanceof Leaf)
+            return 1;
+
+        return 0;
+    }
 }

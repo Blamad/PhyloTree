@@ -2,6 +2,7 @@
  * Created by Blamad on 18.12.2016.
  */
 
+import forester.Forester;
 import tree.Tree;
 import tree.exporter.NewickTreeExporter;
 import utils.PhyloTreeException;
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  + Drzewa wczytywane są z pliku tekstowego (można użyć jakiegoś gotowego parsera np. formatu NEWICK).
  Operacje:
  -  konwersja reprezentacji „rodzina zgodnych klastrów” ⇔ drzewo jako graf z jakąś jego wizualizacją
- (oraz importTreeAndWriteOut poprawności danych tj. „czy podana rodzina była zgodna?”).
+ (oraz test poprawności danych tj. „czy podana rodzina była zgodna?”).
  -  Wyznaczanie odległości topologicznej RF między parą drzew, drzewa konsensusu (o podanym poziomie procentowym)
  dla zadanego zbioru drzew  oraz jej wspólne rozszerzenie (jeśli takie istnieje).
  - Obcięcie podanego drzewa do drzewa filogenetycznego do zadanego podzbioru liści.
@@ -37,7 +38,7 @@ public class PhyloTree {
     public void run()
     {
         importTreeAndWriteOut(this.newick);
-        //new Forester(this.newick).drawTree();
+        new Forester(this.newick).drawTree();
     }
 
     private void importTreeAndWriteOut(String newick)

@@ -2,9 +2,7 @@ package tree;
 
 import tree.exporter.Leaf;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Blamad on 18.12.2016.
@@ -15,7 +13,7 @@ public class Node implements Comparable<Node>{
     protected Integer depth;
 
     private Node parent;
-    private Set<Node> listOfChildren = new HashSet();
+    private List<Node> listOfChildren = new ArrayList();
 
     public Node(Double distanceToParent)
     {
@@ -23,14 +21,11 @@ public class Node implements Comparable<Node>{
         this.depth = 0;
     }
 
-    public Boolean addChild(Node child)
+    public void addChild(Node child)
     {
-        if(listOfChildren.add(child)) {
-            child.setParent(this);
-            child.depth += 1;
-            return true;
-        }
-        return false;
+        listOfChildren.add(child);
+        child.setParent(this);
+        child.depth += 1;
     }
 
     public Node getParent()
@@ -43,7 +38,7 @@ public class Node implements Comparable<Node>{
         return distanceToParent;
     }
 
-    public Set<Node> getChildren()
+    public List<Node> getChildren()
     {
         return listOfChildren;
     }
