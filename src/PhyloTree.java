@@ -2,19 +2,13 @@
  * Created by Blamad on 18.12.2016.
  */
 
-import forester.Forester;
-import jebl.evolution.graphs.Node;
-import jebl.evolution.io.NewickImporter;
-import jebl.evolution.trees.SimpleRootedTree;
 import tree.Tree;
 import tree.exporter.NewickTreeExporter;
 import utils.PhyloTreeException;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,9 +37,7 @@ public class PhyloTree {
     public void run()
     {
         importTreeAndWriteOut(this.newick);
-
-        wypiszNaSurowo(this.newick);
-        new Forester(this.newick).drawTree();
+        //new Forester(this.newick).drawTree();
     }
 
     private void importTreeAndWriteOut(String newick)
@@ -62,35 +54,6 @@ public class PhyloTree {
         }
 
         tree.printTreeToConsole();
-    }
-
-    private void wypiszNaSurowo(String newick) {
-        StringReader sr = new StringReader(newick);
-        NewickImporter ni = new NewickImporter(sr, true);
-
-        try {
-            SimpleRootedTree srt = (SimpleRootedTree) ni.importNextTree();
-            Node rootNode = srt.getRootNode();
-            processNode(srt, rootNode, 0);
-        } catch (Exception e) { }
-    }
-
-    private void processNode(SimpleRootedTree srt, Node node, Integer depth)
-    {
-        List<Node> children = srt.getChildren(node);
-        if(children.isEmpty())
-        {
-            String result = "";
-            while(--depth > 0)
-                result += "\t";
-            result += srt.getTaxon(node);
-            System.out.println(result);
-        }
-
-        for(Node childNode : children)
-        {
-            processNode(srt, childNode, depth+1);
-        }
     }
 
     public static void main(String [] args)

@@ -2,6 +2,9 @@ package tree;
 
 import tree.exporter.Leaf;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,7 +42,11 @@ public class Tree {
             return;
         }
 
-        for(Node childNode : node.getChildren())
+        List<Node> listOfChildren = new ArrayList();
+        listOfChildren.addAll(node.getChildren());
+        Collections.sort(listOfChildren);
+
+        for(Node childNode : listOfChildren)
         {
             processNode(childNode, depth+1);
         }
