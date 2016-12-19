@@ -20,11 +20,13 @@ import java.util.logging.Logger;
  11. „Kalkulator” drzew filogenetycznych ukorzenionych. Typ A.
  + Drzewa wczytywane są z pliku tekstowego (można użyć jakiegoś gotowego parsera np. formatu NEWICK).
  Operacje:
- -  konwersja reprezentacji „rodzina zgodnych klastrów” ⇔ drzewo jako graf z jakąś jego wizualizacją
- (oraz test poprawności danych tj. „czy podana rodzina była zgodna?”).
+ +  konwersja reprezentacji „rodzina zgodnych klastrów” ⇔ drzewo jako graf z jakąś jego wizualizacją
+ (oraz test poprawności danych tj. „czy podana rodzina była zgodna?”). - zgodność jest zdaje się walidowana przy wczytywaniu łańcucha.
+ + Obcięcie podanego drzewa do drzewa filogenetycznego do zadanego podzbioru liści.
+
+ //TODO
  -  Wyznaczanie odległości topologicznej RF między parą drzew, drzewa konsensusu (o podanym poziomie procentowym)
  dla zadanego zbioru drzew  oraz jej wspólne rozszerzenie (jeśli takie istnieje).
- - Obcięcie podanego drzewa do drzewa filogenetycznego do zadanego podzbioru liści.
  */
 
 public class PhyloTree {
