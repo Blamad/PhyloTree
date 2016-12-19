@@ -1,7 +1,5 @@
 package tree;
 
-import tree.exporter.Leaf;
-
 import java.util.*;
 
 /**
@@ -11,13 +9,15 @@ public class Node implements Comparable<Node>{
 
     protected Double distanceToParent;
     protected Integer depth;
+    private String label;
 
     private Node parent;
     private List<Node> listOfChildren = new ArrayList();
 
-    public Node(Double distanceToParent)
+    public Node(String label, Double distanceToParent)
     {
         this.distanceToParent = distanceToParent;
+        this.label = label;
         this.depth = 0;
     }
 
@@ -43,9 +43,20 @@ public class Node implements Comparable<Node>{
         return listOfChildren;
     }
 
+    public String getLabel()
+    {
+        return label;
+    }
+
     public void setParent(Node node)
     {
         parent = node;
+    }
+
+    @Override
+    public Node clone()
+    {
+        return new Node(label, distanceToParent);
     }
 
     @Override

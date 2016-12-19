@@ -1,6 +1,4 @@
-package tree.exporter;
-
-import tree.Node;
+package tree;
 
 /**
  * Created by Blamad on 18.12.2016.
@@ -11,7 +9,7 @@ public class Leaf extends Node {
 
     public Leaf(String name, Double distanceToParent)
     {
-        super(distanceToParent);
+        super(null, distanceToParent);
         this.name = name;
     }
 
@@ -21,12 +19,16 @@ public class Leaf extends Node {
     }
 
     @Override
-    public int compareTo(Node o) {
-        if (this instanceof Leaf)
-            return -1;
-        if (o instanceof Leaf)
-            return 1;
+    public Node clone()
+    {
+        return new Leaf(name, distanceToParent);
+    }
 
-        return 0;
+    @Override
+    public int compareTo(Node o) {
+        if (o instanceof Leaf)
+            return this.getName().compareTo(((Leaf) o).getName());
+        else
+            return 1;
     }
 }

@@ -1,10 +1,7 @@
 package tree;
 
-import tree.exporter.Leaf;
-
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Blamad on 18.12.2016.
@@ -39,8 +36,14 @@ public class Tree {
             Leaf leaf = (Leaf) node;
             result += leaf.getName();
         }
-        else
+        else {
             result += "+";
+            if(node.getLabel() != null)
+                result += "("+node.getLabel()+")";
+        }
+
+        if(node.getDistanceToParent() != null && node != rootNode)
+            result += " [" + new DecimalFormat("0.##").format(node.getDistanceToParent()) + "]";
 
         System.out.println(result);
 

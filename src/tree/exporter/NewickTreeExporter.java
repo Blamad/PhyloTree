@@ -5,6 +5,7 @@ import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NewickImporter;
 import jebl.evolution.trees.SimpleRootedTree;
+import tree.Leaf;
 import tree.Tree;
 import utils.PhyloTreeException;
 
@@ -45,19 +46,25 @@ public class NewickTreeExporter {
     private static tree.Node createNode(SimpleRootedTree srt, Node node, Boolean leaf)
     {
         String name = null;
+        String label = null;
         Double distance = null;
 
         if(srt.getTaxon(node) != null)
             name = srt.getTaxon(node).getName();
+        else if (node.getAttribute("label") != null)
+            label = (String) node.getAttribute("label");
         try {
             if (srt.getParent(node) != null)
                 distance = srt.getEdgeLength(srt.getParent(node), node);
         } catch (Graph.NoEdgeException e) { }
 
+        if(srt.hasLengths())
+            distance = srt.getLength(node);
+
         if(leaf)
             return new Leaf(name, distance);
         else
-            return new tree.Node(distance);
+            return new tree.Node(label, distance);
     }
 
     private static void populateTree(SimpleRootedTree srt, Node node, tree.Node parentNode)
