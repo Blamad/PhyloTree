@@ -104,7 +104,6 @@ public class PhyloTree {
                 }
             } catch(Exception e) {
                 System.out.println("Sth went wrong. Try again.");
-                e.printStackTrace();
             }
             System.out.print(">");
             input = sc.nextLine();
@@ -125,7 +124,6 @@ public class PhyloTree {
             }
         } catch (IOException e) {
             System.out.println("No such file!");
-            e.printStackTrace();
         }
     }
 
