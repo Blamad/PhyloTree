@@ -1,6 +1,9 @@
 package tree;
 
+import tree.utils.TrivialCluster;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 
 /**
@@ -9,6 +12,7 @@ import java.util.Collections;
 public class Tree {
 
     private Node rootNode;
+    private TrivialCluster trivialCluster = new TrivialCluster();
 
     public Tree(Node rootNode)
     {
@@ -51,6 +55,39 @@ public class Tree {
         for(Node childNode : node.getChildren())
         {
             processNode(childNode, depth+1);
+        }
+    }
+
+    public TrivialCluster transformToTrivialCluster() {
+        Node node = rootNode;
+        if (node != null) {
+            getAllNodes(node);
+        }
+        return trivialCluster;
+    }
+
+    private void getAllNodes(Node node) {
+        preOrder(node);
+        trivialCluster.saveClusterFromOneNode();
+        if (node instanceof Leaf)
+            return;
+        else {
+            for (Node children : node.getChildren()) {
+                if (!(children instanceof Leaf))
+                    getAllNodes(children);
+            }
+        }
+    }
+
+    private void preOrder(Node node) {
+        if (node instanceof Leaf) {
+            Leaf leaf = (Leaf) node;
+            trivialCluster.addToClusterFromOneNode(leaf.getName());
+        }
+        else {
+            for (Node children : node.getChildren()) {
+                preOrder(children);
+            }
         }
     }
 }

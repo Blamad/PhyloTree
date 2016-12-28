@@ -6,6 +6,7 @@ import forester.Forester;
 import tree.Tree;
 import tree.utils.TreeUtils;
 import tree.exporter.NewickTreeExporter;
+import tree.utils.TrivialCluster;
 import utils.PhyloTreeException;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class PhyloTree {
     private Logger logger;
     private String newick;
     private Tree tree;
+    private TrivialCluster trivialCluster;
 
     public PhyloTree()
     {
@@ -57,6 +59,7 @@ public class PhyloTree {
                         System.out.println("To display loaded tree type \"d\"");
                         System.out.println("To prune current tree to subset of leaves type \"p <leaves_comma_separated>\"");
                         System.out.println("To display loaded tree using Forester lib type \"f\"");
+                        System.out.println("To generate trivial cluster type \"t\"");
                         System.out.println("To exit PhyloTree type \"q\"");
                         System.out.println("To display help again type \"h\"");
                         break;
@@ -74,6 +77,14 @@ public class PhyloTree {
                             System.out.println("custom pattern loaded");
                         } catch (PhyloTreeException e) {
                             System.out.println("Given pattern is not a NEWICK tree format!");
+                        }
+                        break;
+                    case 't':
+                        if (tree == null)
+                            System.out.println("No tree loaded in memory yet!");
+                        else {
+                            trivialCluster = tree.transformToTrivialCluster();
+                            trivialCluster.print();
                         }
                         break;
                     case 'f':
