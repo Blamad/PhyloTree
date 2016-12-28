@@ -4,6 +4,7 @@
 
 import forester.Forester;
 import tree.Tree;
+import tree.utils.ClusterUtils;
 import tree.utils.TreeUtils;
 import tree.exporter.NewickTreeExporter;
 import tree.utils.TrivialCluster;
@@ -35,7 +36,10 @@ public class PhyloTree {
     private Logger logger;
     private String newick;
     private Tree tree;
-    private TrivialCluster trivialCluster;
+    private String newickSecond;
+    private Tree treeSecond;
+    private TrivialCluster trivialCluster = new TrivialCluster();
+    private TrivialCluster trivialClusterSecond = new TrivialCluster();
 
     public PhyloTree()
     {
@@ -55,18 +59,28 @@ public class PhyloTree {
                 switch (input.charAt(0)) {
                     case 'h':
                         System.out.println("To load tree from file stored in res type \"l <filename>\"");
+                        System.out.println("To load second tree from file stored in res type \"L <filename>\"");
                         System.out.println("To load custom tree from commandline type \"c <your_tree>\"");
+                        System.out.println("To load second custom tree from commandline type \"C <your_tree>\"");
                         System.out.println("To display loaded tree type \"d\"");
                         System.out.println("To prune current tree to subset of leaves type \"p <leaves_comma_separated>\"");
                         System.out.println("To display loaded tree using Forester lib type \"f\"");
                         System.out.println("To generate trivial cluster type \"t\"");
+                        System.out.println("To generate trivial cluster from second tree type \"t\"");
+                        System.out.println("To merge two different trees type \"m\"");
                         System.out.println("To exit PhyloTree type \"q\"");
                         System.out.println("To display help again type \"h\"");
                         break;
                     case 'l':
-                        if (!devLoad(input)) {
+                        if (!devLoad(input, false)) {
                             String fileName = "res\\" + input.substring(2).trim();
-                            loadFromFile(fileName);
+                            loadFromFile(fileName, false); //is not second tree
+                        }
+                        break;
+                    case 'L':
+                        if (!devLoad(input, true)) {
+                            String fileName = "res\\" + input.substring(2).trim();
+                            loadFromFile(fileName, true); //is second tree
                         }
                         break;
                     case 'c':
@@ -79,12 +93,46 @@ public class PhyloTree {
                             System.out.println("Given pattern is not a NEWICK tree format!");
                         }
                         break;
+                    case 'C':
+                        String customTree2 = input.substring(2).trim();
+                        try {
+                            treeSecond = NewickTreeExporter.importTree(customTree2);
+                            newickSecond = customTree2;
+                            System.out.println("custom pattern loaded");
+                        } catch (PhyloTreeException e) {
+                            System.out.println("Given pattern is not a NEWICK tree format!");
+                        }
+                        break;
                     case 't':
                         if (tree == null)
                             System.out.println("No tree loaded in memory yet!");
                         else {
+                            trivialCluster.clear();
                             trivialCluster = tree.transformToTrivialCluster();
                             trivialCluster.print();
+                        }
+                        break;
+                    case 'T':
+                        if (treeSecond == null)
+                            System.out.println("No tree loaded in memory yet!");
+                        else {
+                            trivialClusterSecond.clear();
+                            trivialClusterSecond = treeSecond.transformToTrivialCluster();
+                            trivialClusterSecond.print();
+                        }
+                        break;
+                    case 'm':
+                        if (tree == null || treeSecond == null)
+                            System.out.println("First or second tree not loaded in memory yet!");
+                        else {
+                            if (trivialCluster == null)
+                                trivialCluster = tree.transformToTrivialCluster();
+                            if (trivialClusterSecond == null)
+                                trivialClusterSecond = treeSecond.transformToTrivialCluster();
+                            TrivialCluster mergedCluster = ClusterUtils.mergeTwoClusters(trivialCluster, trivialClusterSecond);
+                            mergedCluster.print();
+                            //Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
+                            //mergedTree.printTreeToConsole();
                         }
                         break;
                     case 'f':
@@ -121,13 +169,19 @@ public class PhyloTree {
         }
     }
 
-    private void loadFromFile(String fileName)
+    private void loadFromFile(String fileName, boolean isSecondTree)
     {
         try {
-            newick = new String(Files.readAllBytes(Paths.get(fileName)));
+            if (!isSecondTree)
+                newick = new String(Files.readAllBytes(Paths.get(fileName)));
+            else
+                newickSecond = new String(Files.readAllBytes(Paths.get(fileName)));
             try
             {
-                tree = NewickTreeExporter.importTree(newick);
+                if (!isSecondTree)
+                    tree = NewickTreeExporter.importTree(newick);
+                else
+                    treeSecond = NewickTreeExporter.importTree(newickSecond);
                 System.out.println(fileName + " loaded");
             }
             catch (PhyloTreeException e) {
@@ -138,7 +192,7 @@ public class PhyloTree {
         }
     }
 
-    private Boolean devLoad(String input)
+    private Boolean devLoad(String input, boolean isSecondTree)
     {
         String in = input.substring(2);
         try {
@@ -146,19 +200,19 @@ public class PhyloTree {
             switch (testNo)
             {
                 case 1:
-                    loadFromFile("res/tree_1.txt");
+                    loadFromFile("res/tree_1.txt", isSecondTree);
                     break;
                 case 2:
-                    loadFromFile("res/tree_2.txt");
+                    loadFromFile("res/tree_2.txt", isSecondTree);
                     break;
                 case 3:
-                    loadFromFile("res/tree_3.txt");
+                    loadFromFile("res/tree_3.txt", isSecondTree);
                     break;
                 case 4:
-                    loadFromFile("res/tree_4.txt");
+                    loadFromFile("res/tree_4.txt", isSecondTree);
                     break;
                 case 5:
-                    loadFromFile("res/tree_zyciowe.txt");
+                    loadFromFile("res/tree_zyciowe.txt", isSecondTree);
                     break;
                 default:
                     return false;
@@ -171,7 +225,8 @@ public class PhyloTree {
         return true;
     }
 
-    private void importTreeAndWriteOut(String newick)
+    /*TODO: to delete? - not used */
+    /*private void importTreeAndWriteOut(String newick)
     {
         try
         {
@@ -183,7 +238,7 @@ public class PhyloTree {
         }
 
         tree.printTreeToConsole();
-    }
+    }*/
 
     public static void main(String [] args)
     {
