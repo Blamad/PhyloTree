@@ -15,8 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  11. „Kalkulator” drzew filogenetycznych ukorzenionych. Typ A.
@@ -33,18 +31,12 @@ import java.util.logging.Logger;
 
 public class PhyloTree {
 
-    private Logger logger;
     private String newick;
     private Tree tree;
     private String newickSecond;
     private Tree treeSecond;
     private TrivialCluster trivialCluster = new TrivialCluster();
     private TrivialCluster trivialClusterSecond = new TrivialCluster();
-
-    public PhyloTree()
-    {
-        logger = Logger.getLogger(getClass().getSimpleName());
-    }
 
     public void run()
     {
@@ -67,6 +59,7 @@ public class PhyloTree {
                         System.out.println("To display loaded tree using Forester lib type \"f\"");
                         System.out.println("To generate trivial cluster type \"t\"");
                         System.out.println("To generate trivial cluster from second tree type \"t\"");
+                        System.out.println("To generate tree from trivial cluster type \"r\"");
                         System.out.println("To merge two different trees type \"m\"");
                         System.out.println("To exit PhyloTree type \"q\"");
                         System.out.println("To display help again type \"h\"");
@@ -121,18 +114,26 @@ public class PhyloTree {
                             trivialClusterSecond.print();
                         }
                         break;
+                    case 'r':
+                        if (trivialCluster.getTrivialClusters().isEmpty())
+                            System.out.println("No trivial cluster!");
+                        else {
+                            Tree convertedTree = ClusterUtils.convertTrivialClusterToTree(trivialCluster);
+                            convertedTree.printTreeToConsole();
+                        }
+                        break;
                     case 'm':
                         if (tree == null || treeSecond == null)
                             System.out.println("First or second tree not loaded in memory yet!");
                         else {
-                            if (trivialCluster == null)
+                            if (trivialCluster.getTrivialClusters().isEmpty())
                                 trivialCluster = tree.transformToTrivialCluster();
-                            if (trivialClusterSecond == null)
+                            if (trivialClusterSecond.getTrivialClusters().isEmpty())
                                 trivialClusterSecond = treeSecond.transformToTrivialCluster();
                             TrivialCluster mergedCluster = ClusterUtils.mergeTwoClusters(trivialCluster, trivialClusterSecond);
                             mergedCluster.print();
-                            //Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
-                            //mergedTree.printTreeToConsole();
+                            Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
+                            mergedTree.printTreeToConsole();
                         }
                         break;
                     case 'f':
@@ -224,21 +225,6 @@ public class PhyloTree {
 
         return true;
     }
-
-    /*TODO: to delete? - not used */
-    /*private void importTreeAndWriteOut(String newick)
-    {
-        try
-        {
-            tree = NewickTreeExporter.importTree(newick);
-        }
-        catch (PhyloTreeException e) {
-            logger.log(Level.WARNING, e.getInfo());
-            return;
-        }
-
-        tree.printTreeToConsole();
-    }*/
 
     public static void main(String [] args)
     {

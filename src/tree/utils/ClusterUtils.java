@@ -1,11 +1,12 @@
 package tree.utils;
 
+import tree.Leaf;
+import tree.Node;
 import tree.Tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Aga on 2016-12-28.
@@ -15,17 +16,13 @@ public class ClusterUtils {
     public static TrivialCluster mergeTwoClusters(TrivialCluster trivialClusterFirst, TrivialCluster trivialClusterSecond) {
         TrivialCluster mergedCluster = new TrivialCluster();
         ArrayList<String> firstClusters = copyCluster(trivialClusterFirst).getTrivialClusters();
-        //Collections.sort(firstClusters, new LengthComparator());
-        int firstClusterSize = firstClusters.size();
         ArrayList<String> secondClusters = copyCluster(trivialClusterSecond).getTrivialClusters();
-        //Collections.sort(secondClusters, new LengthComparator());
-        int secondClusterSize = secondClusters.size();
 
         //add all equals clusters
-        for (int first = 0; first < firstClusterSize; first++) {
-            for (int sec = 0; sec < secondClusterSize; sec++) {
-                if (clustersAreTheSame(firstClusters.get(first), secondClusters.get(sec))) {
-                    mergedCluster.add(firstClusters.get(first));
+        for (String firstCluster : firstClusters) {
+            for (String secondCluster : secondClusters) {
+                if (clustersAreTheSame(firstCluster, secondCluster)) {
+                    mergedCluster.add(firstCluster);
                 }
             }
         }

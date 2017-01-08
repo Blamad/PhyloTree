@@ -1,3 +1,4 @@
+(((F,D)G,(T,(N,K)L,J)E)B,((X,Y,S)H,(W,V,M)I)C)A;
 (((B,C)N,D)O,A)M;
 (A,B,F,(C,E)D)R;
 (A,B,C,(E,F)D)R;
