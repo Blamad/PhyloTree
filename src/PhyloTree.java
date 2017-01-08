@@ -7,7 +7,7 @@ import tree.Tree;
 import tree.utils.ClusterUtils;
 import tree.utils.TreeUtils;
 import tree.exporter.NewickTreeExporter;
-import tree.utils.TrivialCluster;
+import tree.utils.ClusterFamily;
 import utils.PhyloTreeException;
 
 import java.io.IOException;
@@ -35,8 +35,8 @@ public class PhyloTree {
     private Tree tree;
     private String newickSecond;
     private Tree treeSecond;
-    private TrivialCluster trivialCluster = new TrivialCluster();
-    private TrivialCluster trivialClusterSecond = new TrivialCluster();
+    private ClusterFamily clusterFamily = new ClusterFamily();
+    private ClusterFamily clusterFamilySecond = new ClusterFamily();
 
     public void run()
     {
@@ -57,8 +57,8 @@ public class PhyloTree {
                         System.out.println("To display loaded tree type \"d\"");
                         System.out.println("To prune current tree to subset of leaves type \"p <leaves_comma_separated>\"");
                         System.out.println("To display loaded tree using Forester lib type \"f\"");
-                        System.out.println("To generate trivial cluster type \"t\"");
-                        System.out.println("To generate trivial cluster from second tree type \"t\"");
+                        System.out.println("To generate cluster type \"t\"");
+                        System.out.println("To generate cluster from second tree type \"T\"");
                         System.out.println("To generate tree from trivial cluster type \"r\"");
                         System.out.println("To merge two different trees type \"m\"");
                         System.out.println("To exit PhyloTree type \"q\"");
@@ -100,25 +100,25 @@ public class PhyloTree {
                         if (tree == null)
                             System.out.println("No tree loaded in memory yet!");
                         else {
-                            trivialCluster.clear();
-                            trivialCluster = tree.transformToTrivialCluster();
-                            trivialCluster.print();
+                            clusterFamily.clear();
+                            clusterFamily = tree.transformToTrivialCluster();
+                            clusterFamily.print();
                         }
                         break;
                     case 'T':
                         if (treeSecond == null)
                             System.out.println("No tree loaded in memory yet!");
                         else {
-                            trivialClusterSecond.clear();
-                            trivialClusterSecond = treeSecond.transformToTrivialCluster();
-                            trivialClusterSecond.print();
+                            clusterFamilySecond.clear();
+                            clusterFamilySecond = treeSecond.transformToTrivialCluster();
+                            clusterFamilySecond.print();
                         }
                         break;
                     case 'r':
-                        if (trivialCluster.getTrivialClusters().isEmpty())
+                        if (clusterFamily.getTrivialClusters().isEmpty())
                             System.out.println("No trivial cluster!");
                         else {
-                            Tree convertedTree = ClusterUtils.convertTrivialClusterToTree(trivialCluster);
+                            Tree convertedTree = ClusterUtils.convertTrivialClusterToTree(clusterFamily);
                             convertedTree.printTreeToConsole();
                         }
                         break;
@@ -126,11 +126,11 @@ public class PhyloTree {
                         if (tree == null || treeSecond == null)
                             System.out.println("First or second tree not loaded in memory yet!");
                         else {
-                            if (trivialCluster.getTrivialClusters().isEmpty())
-                                trivialCluster = tree.transformToTrivialCluster();
-                            if (trivialClusterSecond.getTrivialClusters().isEmpty())
-                                trivialClusterSecond = treeSecond.transformToTrivialCluster();
-                            TrivialCluster mergedCluster = ClusterUtils.mergeTwoClusters(trivialCluster, trivialClusterSecond);
+                            if (clusterFamily.getTrivialClusters().isEmpty())
+                                clusterFamily = tree.transformToTrivialCluster();
+                            if (clusterFamilySecond.getTrivialClusters().isEmpty())
+                                clusterFamilySecond = treeSecond.transformToTrivialCluster();
+                            ClusterFamily mergedCluster = ClusterUtils.mergeTwoClusters(clusterFamily, clusterFamilySecond);
                             mergedCluster.print();
                             Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
                             mergedTree.printTreeToConsole();

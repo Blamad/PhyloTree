@@ -4,14 +4,16 @@ import tree.Node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Aga on 2016-12-28.
  */
-public class TrivialCluster {
-    private ArrayList<String> trivialClusters = new ArrayList<>();
+public class ClusterFamily {
+    private Set<String> trivialClusters = new HashSet<>();
     private String clusterFromOneNode = "";
-    private ArrayList<String> clusterNodes = new ArrayList<>();
+    public ArrayList<String> clusterNodes = new ArrayList<>();
 
     /*function to add clusters to array of clusters */
     public void add(String cluster) {
@@ -36,6 +38,9 @@ public class TrivialCluster {
     public void print() {
         for (String cluster : trivialClusters)
             System.out.println("{" + cluster + "} ");
+        System.out.println("AAAA");
+        for (String cluster : clusterNodes)
+            System.out.println("{" + cluster + "} ");
     }
 
     /*clear trivial cluster */
@@ -45,12 +50,7 @@ public class TrivialCluster {
     }
 
     public ArrayList<String> getTrivialClusters() {
-        return trivialClusters;
+        return new ArrayList<>(trivialClusters);
     }
 
-    public ArrayList<String> getNodesCluster(int clusterID) {
-        String[] nodes = trivialClusters.get(clusterID).split(" ");
-        clusterNodes.addAll(Arrays.asList(nodes)); //get leaves from cluster
-        return clusterNodes;
-    }
 }

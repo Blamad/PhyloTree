@@ -8,8 +8,8 @@ import java.util.*;
 public class Node implements Comparable<Node>{
 
     protected Double distanceToParent;
-    protected Integer depth;
-    private String label;
+    protected Integer depth = 0;
+    public String label;
 
     private Node parent;
     private List<Node> listOfChildren = new ArrayList();
@@ -19,6 +19,11 @@ public class Node implements Comparable<Node>{
         this.distanceToParent = distanceToParent;
         this.label = label;
         this.depth = 0;
+    }
+
+    public Node() {};
+    public Node(String s){
+        this.label = s;
     }
 
     public void addChild(Node child)
