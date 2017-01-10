@@ -134,4 +134,16 @@ public class ClusterUtils {
 
         return "{"+wynik.substring(0, wynik.length()-2) + "}";
     }
+
+    public static int countRF(ClusterFamily first, ClusterFamily second) {
+        int sumRF = 0;
+        for (String cluster : first.getTrivialClusters())
+            if (!second.getTrivialClusters().contains(cluster))
+                sumRF++;
+        for (String cluster : second.getTrivialClusters())
+            if (!first.getTrivialClusters().contains(cluster))
+                sumRF++;
+
+        return sumRF/2;
+    }
 }

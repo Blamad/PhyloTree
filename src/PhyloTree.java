@@ -57,6 +57,7 @@ public class PhyloTree {
                         System.out.println("To prune current tree to subset of leaves type \"p <0-9> <leaves_comma_separated>\"");
                         System.out.println("To display loaded newick tree using Forester lib type \"f <0-9>\"");
                         System.out.println("To merge trees into new tree type \"m <0-9>\"");
+                        System.out.println("To count RF type \"a\"");
                         System.out.println("To exit PhyloTree type \"q\"");
                         System.out.println("To display help again type \"h\"");
                         break;
@@ -71,6 +72,9 @@ public class PhyloTree {
                         break;
                     case 'm': //Merge
                         mergeTrees();
+                        break;
+                    case 'a': //count RF
+                        countRF();
                         break;
                     case 'f': //Rysuj foresterem
                         drawForester();
@@ -142,6 +146,14 @@ public class PhyloTree {
         }
         treesArray[index] = null;
         System.out.println("Tree removed.");
+    }
+
+    private void countRF() {
+        if (treesArray[0] == null || treesArray[1] == null)
+            System.out.println("Wrong number of trees. Shoulb be 2.");
+        else {
+            System.out.println(ClusterUtils.countRF(treesArray[0].getCluster(), treesArray[1].getCluster()));
+        }
     }
 
     private void mergeTrees() {

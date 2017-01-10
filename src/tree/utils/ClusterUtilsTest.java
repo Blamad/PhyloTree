@@ -9,7 +9,7 @@ import tree.rooted.cluster.ClusterFamily;
  */
 public class ClusterUtilsTest {
 
-    @org.junit.Test
+    /*@org.junit.Test
     public void testMergeTwoClusters() throws Exception {
         Tree t1, t2;
         String s = "(A,((B,C),D))R;";
@@ -52,5 +52,5 @@ public class ClusterUtilsTest {
         System.out.println("Zamiana na drzewo");
         Tree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
         mergedTree.printTreeToConsole();
-    }
+    }*/
 }
