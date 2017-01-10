@@ -5,9 +5,11 @@ import tree.rooted.tree.Node;
 import tree.rooted.tree.Tree;
 import tree.rooted.cluster.ClusterFamily;
 import tree.utils.comparators.StringLengthComparator;
+import tree.utils.comparators.StringValueComparator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +41,7 @@ public class ClusterUtils {
         return secondList.containsAll(firstList) && firstList.containsAll(secondList);
     }
 
-    public static void makeSomethingLikeHesseGraph(Node root, List<String> tab) {
+    private static void makeSomethingLikeHesseGraph(Node root, List<String> tab) {
         for(int i = 1; i < tab.size(); i++){
             String s = tab.get(i);
             Node tmpNode = new Node(s);
@@ -49,7 +51,7 @@ public class ClusterUtils {
             }
         }
     }
-    public static void cleanThatShitBFS(Node node)
+    private static void cleanThatShitBFS(Node node)
     {
         for(int i = 0; i < node.getChildren().size(); i++)
         {
@@ -68,7 +70,7 @@ public class ClusterUtils {
         }
     }
 
-    public static void removeNodeCoverdByChildren(Node n)
+    private static void removeNodeCoverdByChildren(Node n)
     {
         for (Node node :n.getChildren()) {
             n.label = n.label.replace(node.getLabel(), "");
@@ -116,5 +118,20 @@ public class ClusterUtils {
             newCluster.add(clus);
         }
         return newCluster;
+    }
+
+    public static String sortClusterRow(String clusterRow)
+    {
+        String tmp = clusterRow.replaceAll("[{},]", "").trim(); //Wywala przecinki, nawiasy i zostawia tylko slowa oddzielone spacjami
+        String nodes[] = tmp.split(" "); // rozbija slowa na spacjach w tablice
+        List<String> nodesList = Arrays.asList(nodes);
+        Collections.sort(nodesList, new StringValueComparator()); //sort na liscie slow
+
+        String wynik = "";
+
+        for(String node : nodesList)
+            wynik += node + ", ";
+
+        return "{"+wynik.substring(0, wynik.length()-2) + "}";
     }
 }
