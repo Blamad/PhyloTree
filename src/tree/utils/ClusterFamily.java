@@ -38,7 +38,6 @@ public class ClusterFamily {
     public void print() {
         for (String cluster : trivialClusters)
             System.out.println("{" + cluster + "} ");
-        System.out.println("AAAA");
         for (String cluster : clusterNodes)
             System.out.println("{" + cluster + "} ");
     }

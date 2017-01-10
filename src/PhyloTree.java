@@ -13,7 +13,9 @@ import utils.PhyloTreeException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -30,11 +32,10 @@ import java.util.Scanner;
  */
 
 public class PhyloTree {
+    public static LinkedList<Tree> Forrest;
 
     private String newick;
     private Tree tree;
-    private String newickSecond;
-    private Tree treeSecond;
     private ClusterFamily clusterFamily = new ClusterFamily();
     private ClusterFamily clusterFamilySecond = new ClusterFamily();
 
@@ -51,9 +52,9 @@ public class PhyloTree {
                 switch (input.charAt(0)) {
                     case 'h':
                         System.out.println("To load tree from file stored in res type \"l <filename>\"");
-                        System.out.println("To load second tree from file stored in res type \"L <filename>\"");
+                        //System.out.println("To load second tree from file stored in res type \"L <filename>\"");
                         System.out.println("To load custom tree from commandline type \"c <your_tree>\"");
-                        System.out.println("To load second custom tree from commandline type \"C <your_tree>\"");
+                        //System.out.println("To load second custom tree from commandline type \"C <your_tree>\"");
                         System.out.println("To display loaded tree type \"d\"");
                         System.out.println("To prune current tree to subset of leaves type \"p <leaves_comma_separated>\"");
                         System.out.println("To display loaded tree using Forester lib type \"f\"");
@@ -86,16 +87,6 @@ public class PhyloTree {
                             System.out.println("Given pattern is not a NEWICK tree format!");
                         }
                         break;
-                    case 'C':
-                        String customTree2 = input.substring(2).trim();
-                        try {
-                            treeSecond = NewickTreeExporter.importTree(customTree2);
-                            newickSecond = customTree2;
-                            System.out.println("custom pattern loaded");
-                        } catch (PhyloTreeException e) {
-                            System.out.println("Given pattern is not a NEWICK tree format!");
-                        }
-                        break;
                     case 't':
                         if (tree == null)
                             System.out.println("No tree loaded in memory yet!");
@@ -103,15 +94,6 @@ public class PhyloTree {
                             clusterFamily.clear();
                             clusterFamily = tree.transformToTrivialCluster();
                             clusterFamily.print();
-                        }
-                        break;
-                    case 'T':
-                        if (treeSecond == null)
-                            System.out.println("No tree loaded in memory yet!");
-                        else {
-                            clusterFamilySecond.clear();
-                            clusterFamilySecond = treeSecond.transformToTrivialCluster();
-                            clusterFamilySecond.print();
                         }
                         break;
                     case 'r':
@@ -123,18 +105,10 @@ public class PhyloTree {
                         }
                         break;
                     case 'm':
-                        if (tree == null || treeSecond == null)
+                        if (Forrest.size()<2)
                             System.out.println("First or second tree not loaded in memory yet!");
-                        else {
-                            if (clusterFamily.getTrivialClusters().isEmpty())
-                                clusterFamily = tree.transformToTrivialCluster();
-                            if (clusterFamilySecond.getTrivialClusters().isEmpty())
-                                clusterFamilySecond = treeSecond.transformToTrivialCluster();
-                            ClusterFamily mergedCluster = ClusterUtils.mergeTwoClusters(clusterFamily, clusterFamilySecond);
-                            mergedCluster.print();
-                            Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
-                            mergedTree.printTreeToConsole();
-                        }
+                        else
+                            merge_trees();
                         break;
                     case 'f':
                         new Forester(newick).drawTree();
@@ -170,24 +144,31 @@ public class PhyloTree {
         }
     }
 
+    private void merge_trees() {
+        while(Forrest.size() >=2) {
+            Tree t1 = Forrest.pop();
+            Tree t2 = Forrest.pop();
+            ClusterFamily mergedCluster = ClusterUtils.mergeTwoClusters(t1.transformToTrivialCluster(), t2.transformToTrivialCluster());
+            mergedCluster.print();
+            Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
+            Forrest.push(mergedTree);
+        }
+    }
+
     private void loadFromFile(String fileName, boolean isSecondTree)
     {
         try {
-            if (!isSecondTree)
-                newick = new String(Files.readAllBytes(Paths.get(fileName)));
-            else
-                newickSecond = new String(Files.readAllBytes(Paths.get(fileName)));
+            newick = new String(Files.readAllBytes(Paths.get(fileName)));
             try
             {
-                if (!isSecondTree)
-                    tree = NewickTreeExporter.importTree(newick);
-                else
-                    treeSecond = NewickTreeExporter.importTree(newickSecond);
+                tree = NewickTreeExporter.importTree(newick);
                 System.out.println(fileName + " loaded");
+                Forrest.add(tree);
             }
             catch (PhyloTreeException e) {
                 System.out.println("Given pattern is not a NEWICK tree format!");
             }
+
         } catch (IOException e) {
             System.out.println("No such file!");
         }
@@ -228,6 +209,7 @@ public class PhyloTree {
 
     public static void main(String [] args)
     {
+        Forrest = new LinkedList<>();
         new PhyloTree().run();
     }
 }

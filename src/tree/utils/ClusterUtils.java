@@ -6,7 +6,6 @@ import tree.Tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -53,13 +52,13 @@ public class ClusterUtils {
             return dist2 - dist1;
         }
     }
-    public static void make_tree_from_this_shit(Node root, List<String> tab) {
+    public static void make_something_like_hesse_graph(Node root, List<String> tab) {
         for(int i = 1; i < tab.size(); i++){
             String s = tab.get(i);
             Node tmpNode = new Node(s);
             if(root.label.contains(s)) {
                 root.addChild(tmpNode);
-                make_tree_from_this_shit(tmpNode, tab.subList(i,tab.size()));
+                make_something_like_hesse_graph(tmpNode, tab.subList(i,tab.size()));
             }
         }
     }
@@ -82,11 +81,11 @@ public class ClusterUtils {
         }
     }
 
-    public static void grow_fucking_tree_BFS(Node n)
+    public static void remove_node_coverd_by_children(Node n)
     {
         for (Node node :n.getChildren()) {
             n.label = n.label.replace(node.getLabel(), "");
-            grow_fucking_tree_BFS(node);
+            remove_node_coverd_by_children(node);
         }
     }
 
@@ -100,19 +99,18 @@ public class ClusterUtils {
         }
 
         Node root = new Node(tab.get(0));
-        Node tmpRoot = root;
-        make_tree_from_this_shit(root, tab.subList(0, tab.size()));
+        make_something_like_hesse_graph(root, tab.subList(0, tab.size()));
         clean_that_shit_BFS(root);
-        grow_fucking_tree_BFS(root);
-        make_it_amazing(root);
+        remove_node_coverd_by_children(root);
+        make_leafs_from_nodes(root);
 
 
         return new Tree(root);
     }
 
-    private static void make_it_amazing(Node root) {
+    private static void make_leafs_from_nodes(Node root) {
         for (Node n: root.getChildren()) {
-            make_it_amazing(n);
+            make_leafs_from_nodes(n);
         }
         if (root.getLabel() != null) {
             for (char s : root.getLabel().toCharArray()) {
