@@ -127,7 +127,7 @@ public class PhyloTree {
         removeCommand();
         Integer index = getIndex();
         if(!validateIndex(index)) {
-            System.out.println("Number must be in 1-10 range!");
+            System.out.println("Number must be in 0-9 range!");
             return;
         }
         //TODO W przyszlosci..
@@ -137,7 +137,7 @@ public class PhyloTree {
         removeCommand();
         Integer index = getIndex();
         if(!validateIndex(index)) {
-            System.out.println("Number must be in 1-10 range!");
+            System.out.println("Number must be in 0-9 range!");
             return;
         }
         treesArray[index] = null;
@@ -149,7 +149,7 @@ public class PhyloTree {
         removeCommand();
         Integer index = getIndex();
         if(!validateIndex(index)) {
-            System.out.println("Number must be in 1-10 range!");
+            System.out.println("Number must be in 0-9 range!");
             return;
         }
 
