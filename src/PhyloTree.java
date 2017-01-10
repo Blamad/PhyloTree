@@ -56,7 +56,7 @@ public class PhyloTree {
                         System.out.println("To display loaded tree \"d <0-9> <t;c>\" where t - tree struct, c - cluster struct");
                         System.out.println("To prune current tree to subset of leaves type \"p <0-9> <leaves_comma_separated>\"");
                         System.out.println("To display loaded newick tree using Forester lib type \"f <0-9>\"");
-                        System.out.println("To merge trees into new tree type \"m <0-9>\"");
+                        System.out.println("To create consensus tree into new tree type \"m <0-9> <consensus value>\"");
                         System.out.println("To exit PhyloTree type \"q\"");
                         System.out.println("To display help again type \"h\"");
                         break;
@@ -130,7 +130,7 @@ public class PhyloTree {
             System.out.println("Number must be in 0-9 range!");
             return;
         }
-        //TODO W przyszlosci..
+
     }
 
     private void removeTree() {
@@ -150,6 +150,12 @@ public class PhyloTree {
         Integer index = getIndex();
         if(!validateIndex(index)) {
             System.out.println("Number must be in 0-9 range!");
+            return;
+        }
+
+        Integer value = getIndex();
+        if(value < 0 || value > 100) {
+            System.out.println("Consensus value must be in 0-100 range!");
             return;
         }
 
