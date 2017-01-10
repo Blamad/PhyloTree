@@ -5,8 +5,8 @@ import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NewickImporter;
 import jebl.evolution.trees.SimpleRootedTree;
-import tree.Leaf;
-import tree.Tree;
+import tree.rooted.tree.Leaf;
+import tree.rooted.tree.Tree;
 import utils.PhyloTreeException;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class NewickTreeExporter {
             SimpleRootedTree srt = (SimpleRootedTree) ni.importNextTree();
             Node rootNode = srt.getRootNode();
 
-            tree.Node treeRootNode = createNode(srt, rootNode, false);
+            tree.rooted.tree.Node treeRootNode = createNode(srt, rootNode, false);
             populateTree(srt, rootNode, treeRootNode);
 
             tree = new Tree(treeRootNode.getChildren().get(0));
@@ -43,7 +43,7 @@ public class NewickTreeExporter {
         return tree;
     }
 
-    private static tree.Node createNode(SimpleRootedTree srt, Node node, Boolean leaf)
+    private static tree.rooted.tree.Node createNode(SimpleRootedTree srt, Node node, Boolean leaf)
     {
         String name = null;
         String label = null;
@@ -64,13 +64,13 @@ public class NewickTreeExporter {
         if(leaf)
             return new Leaf(name, distance);
         else
-            return new tree.Node(label, distance);
+            return new tree.rooted.tree.Node(label, distance);
     }
 
-    private static void populateTree(SimpleRootedTree srt, Node node, tree.Node parentNode)
+    private static void populateTree(SimpleRootedTree srt, Node node, tree.rooted.tree.Node parentNode)
     {
         List<Node> children = srt.getChildren(node);
-        tree.Node childNode = createNode(srt, node, children.isEmpty());
+        tree.rooted.tree.Node childNode = createNode(srt, node, children.isEmpty());
         parentNode.addChild(childNode);
 
         for(Node child : children)
