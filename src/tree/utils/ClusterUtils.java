@@ -4,6 +4,7 @@ import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Node;
 import tree.rooted.tree.Tree;
 import tree.rooted.cluster.ClusterFamily;
+import tree.utils.comparators.StringLengthComparator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +79,7 @@ public class ClusterUtils {
     public static Tree convertClusterToTree(ClusterFamily mergedCluster) {
 
         ArrayList<String> tab = new ArrayList<>(mergedCluster.getTrivialClusters());
-        tab.sort(new LengthComparator());
+        tab.sort(new StringLengthComparator());
         for (String clus :tab) {
             System.out.println(clus);
         }
