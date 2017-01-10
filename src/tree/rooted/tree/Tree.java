@@ -22,7 +22,7 @@ public class Tree {
         return rootNode;
     }
 
-    public void printTreeToConsole()
+    public void print()
     {
         processNode(rootNode, 0);
     }
