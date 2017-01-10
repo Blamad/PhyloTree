@@ -1,11 +1,8 @@
 package tree.utils;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-import tree.Tree;
+import tree.rooted.tree.Tree;
 import tree.exporter.NewickTreeExporter;
-
-import static org.junit.Assert.*;
+import tree.rooted.cluster.ClusterFamily;
 
 /**
  * Created by baton on 1/8/2017.
@@ -27,7 +24,7 @@ public class ClusterUtilsTest {
         System.out.println("PO ZLACZENIU");
         mergedCluster.print();
         System.out.println("Zamiana na drzewo");
-        Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(mergedCluster);
+        Tree mergedTree = ClusterUtils.convertClusterToTree(mergedCluster);
 
     }
 
@@ -40,7 +37,7 @@ public class ClusterUtilsTest {
         t1.printTreeToConsole();
         System.out.println(s);
         System.out.println("Zamiana na drzewo");
-        Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(t1.transformToTrivialCluster());
+        Tree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
         mergedTree.printTreeToConsole();
     }
 
@@ -53,7 +50,7 @@ public class ClusterUtilsTest {
         t1.printTreeToConsole();
         System.out.println(s);
         System.out.println("Zamiana na drzewo");
-        Tree mergedTree = ClusterUtils.convertTrivialClusterToTree(t1.transformToTrivialCluster());
+        Tree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
         mergedTree.printTreeToConsole();
     }
 }

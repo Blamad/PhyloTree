@@ -1,8 +1,9 @@
 package tree.utils;
 
-import tree.Leaf;
-import tree.Node;
-import tree.Tree;
+import tree.rooted.tree.Leaf;
+import tree.rooted.tree.Node;
+import tree.rooted.tree.Tree;
+import tree.rooted.cluster.ClusterFamily;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +27,7 @@ public class ClusterUtils {
                 }
             }
         }
-
-        return mergedCluster;
+       return mergedCluster;
     }
 
     private static boolean clustersAreTheSame(String first, String second) {
@@ -38,31 +38,17 @@ public class ClusterUtils {
         return secondList.containsAll(firstList) && firstList.containsAll(secondList);
     }
 
-
-    public static class MyComparator implements java.util.Comparator<String> {
-
-        public MyComparator() {
-            super();
-        }
-
-        public int compare(String s1, String s2) {
-            int dist1 = Math.abs(s1.length());
-            int dist2 = Math.abs(s2.length());
-
-            return dist2 - dist1;
-        }
-    }
-    public static void make_something_like_hesse_graph(Node root, List<String> tab) {
+    public static void makeSomethingLikeHesseGraph(Node root, List<String> tab) {
         for(int i = 1; i < tab.size(); i++){
             String s = tab.get(i);
             Node tmpNode = new Node(s);
             if(root.label.contains(s)) {
                 root.addChild(tmpNode);
-                make_something_like_hesse_graph(tmpNode, tab.subList(i,tab.size()));
+                makeSomethingLikeHesseGraph(tmpNode, tab.subList(i,tab.size()));
             }
         }
     }
-    public static void clean_that_shit_BFS(Node node)
+    public static void cleanThatShitBFS(Node node)
     {
         for(int i = 0; i < node.getChildren().size(); i++)
         {
@@ -77,40 +63,39 @@ public class ClusterUtils {
             }
         }
         for (Node n: node.getChildren()) {
-            clean_that_shit_BFS(n);
+            cleanThatShitBFS(n);
         }
     }
 
-    public static void remove_node_coverd_by_children(Node n)
+    public static void removeNodeCoverdByChildren(Node n)
     {
         for (Node node :n.getChildren()) {
             n.label = n.label.replace(node.getLabel(), "");
-            remove_node_coverd_by_children(node);
+            removeNodeCoverdByChildren(node);
         }
     }
 
-    public static Tree convertTrivialClusterToTree(ClusterFamily mergedCluster) {
+    public static Tree convertClusterToTree(ClusterFamily mergedCluster) {
 
-        MyComparator com = new MyComparator();
         ArrayList<String> tab = new ArrayList<>(mergedCluster.getTrivialClusters());
-        tab.sort(com);
+        tab.sort(new LengthComparator());
         for (String clus :tab) {
             System.out.println(clus);
         }
 
         Node root = new Node(tab.get(0));
-        make_something_like_hesse_graph(root, tab.subList(0, tab.size()));
-        clean_that_shit_BFS(root);
-        remove_node_coverd_by_children(root);
-        make_leafs_from_nodes(root);
+        makeSomethingLikeHesseGraph(root, tab.subList(0, tab.size()));
+        cleanThatShitBFS(root);
+        removeNodeCoverdByChildren(root);
+        makeLeavesFromNodes(root);
 
 
         return new Tree(root);
     }
 
-    private static void make_leafs_from_nodes(Node root) {
+    private static void makeLeavesFromNodes(Node root) {
         for (Node n: root.getChildren()) {
-            make_leafs_from_nodes(n);
+            makeLeavesFromNodes(n);
         }
         if (root.getLabel() != null) {
             for (char s : root.getLabel().toCharArray()) {

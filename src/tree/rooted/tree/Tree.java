@@ -1,6 +1,6 @@
-package tree;
+package tree.rooted.tree;
 
-import tree.utils.ClusterFamily;
+import tree.rooted.cluster.ClusterFamily;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -11,7 +11,6 @@ import java.util.Collections;
 public class Tree {
 
     private Node rootNode;
-    private ClusterFamily clusterFamily = new ClusterFamily();
 
     public Tree(Node rootNode)
     {
@@ -54,39 +53,6 @@ public class Tree {
         for(Node childNode : node.getChildren())
         {
             processNode(childNode, depth+1);
-        }
-    }
-
-    public ClusterFamily transformToTrivialCluster() {
-        Node node = rootNode;
-        if (node != null) {
-            getAllNodes(node);
-        }
-        return clusterFamily;
-    }
-
-    private void getAllNodes(Node node) {
-        preOrder(node);
-        clusterFamily.saveClusterFromOneNode();
-        if (node instanceof Leaf)
-            return;
-        else {
-            for (Node children : node.getChildren()) {
-                if (!(children instanceof Leaf))
-                    getAllNodes(children);
-            }
-        }
-    }
-
-    private void preOrder(Node node) {
-        if (node instanceof Leaf) {
-            Leaf leaf = (Leaf) node;
-            clusterFamily.addToClusterFromOneNode(leaf.getName());
-        }
-        else {
-            for (Node children : node.getChildren()) {
-                preOrder(children);
-            }
         }
     }
 }

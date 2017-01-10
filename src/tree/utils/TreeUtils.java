@@ -1,8 +1,9 @@
 package tree.utils;
 
-import tree.Leaf;
-import tree.Node;
-import tree.Tree;
+import tree.rooted.cluster.ClusterFamily;
+import tree.rooted.tree.Leaf;
+import tree.rooted.tree.Node;
+import tree.rooted.tree.Tree;
 
 import java.util.List;
 
@@ -96,6 +97,42 @@ public class TreeUtils {
                 Node newNode = child.clone();
                 copy.addChild(newNode);
                 pruneTree(child, newNode, leaves);
+            }
+        }
+    }
+
+    public static ClusterFamily convertTreeToCluster(Tree tree) {
+        ClusterFamily cluster = new ClusterFamily();
+
+        Node node = tree.getRootNode();
+        if (node != null) {
+            getAllNodes(node, cluster);
+        }
+
+        return cluster;
+    }
+
+    private static void getAllNodes(Node node, ClusterFamily cluster) {
+        preOrder(node, cluster);
+        cluster.saveClusterFromOneNode();
+        if (node instanceof Leaf)
+            return;
+        else {
+            for (Node childNode : node.getChildren()) {
+                if (!(childNode instanceof Leaf))
+                    getAllNodes(childNode, cluster);
+            }
+        }
+    }
+
+    private static void preOrder(Node node, ClusterFamily cluster) {
+        if (node instanceof Leaf) {
+            Leaf leaf = (Leaf) node;
+            cluster.addToClusterFromOneNode(leaf.getName());
+        }
+        else {
+            for (Node childNode : node.getChildren()) {
+                preOrder(childNode, cluster);
             }
         }
     }

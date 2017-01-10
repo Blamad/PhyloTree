@@ -1,4 +1,4 @@
-package tree;
+package tree.rooted.tree;
 
 import java.util.*;
 
