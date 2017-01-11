@@ -120,7 +120,7 @@ public class PhyloTree {
                 input = input.substring(firstSpace+1);
             return index;
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { }
         return -1;
     }
 
@@ -136,6 +136,15 @@ public class PhyloTree {
             return;
         }
 
+        input = input.replaceAll("[{},]", "");
+        String[] values = input.split(";");
+        ClusterFamily clusterFamily = ClusterUtils.createCluster(values);
+        if(clusterFamily == null)
+            System.out.println("Could not create cluster from input.");
+        else {
+            treesArray[index] = new RootedTree(clusterFamily);
+            System.out.println("Custom cluster loaded.");
+        }
     }
 
     private void removeTree() {

@@ -7,10 +7,7 @@ import tree.rooted.cluster.ClusterFamily;
 import tree.utils.comparators.StringLengthComparator;
 import tree.utils.comparators.StringValueComparator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Aga on 2016-12-28.
@@ -82,16 +79,12 @@ public class ClusterUtils {
 
         ArrayList<String> tab = new ArrayList<>(mergedCluster.getTrivialClusters());
         tab.sort(new StringLengthComparator());
-        for (String clus :tab) {
-            System.out.println(clus);
-        }
 
         Node root = new Node(tab.get(0));
         makeSomethingLikeHesseGraph(root, tab.subList(0, tab.size()));
         cleanThatShitBFS(root);
         removeNodeCoverdByChildren(root);
         makeLeavesFromNodes(root);
-
 
         return new Tree(root);
     }
@@ -122,17 +115,64 @@ public class ClusterUtils {
 
     public static String sortClusterRow(String clusterRow)
     {
+        Boolean braces = clusterRow.charAt(0) == '{' && clusterRow.charAt(clusterRow.length()-1) == '}';
+        Boolean comma = clusterRow.contains(",");
+
         String tmp = clusterRow.replaceAll("[{},]", "").trim(); //Wywala przecinki, nawiasy i zostawia tylko slowa oddzielone spacjami
         String nodes[] = tmp.split(" "); // rozbija slowa na spacjach w tablice
         List<String> nodesList = Arrays.asList(nodes);
         Collections.sort(nodesList, new StringValueComparator()); //sort na liscie slow
 
         String wynik = "";
+        String separator = " ";
+        if(comma)
+            separator += ",";
 
         for(String node : nodesList)
-            wynik += node + ", ";
+            wynik += node + separator;
 
-        return "{"+wynik.substring(0, wynik.length()-2) + "}";
+        wynik = wynik.substring(0, wynik.length()-separator.length());
+
+        if(braces)
+            return "{"+ wynik+"}";
+        else
+            return wynik;
+    }
+
+    public static ClusterFamily createCluster(String[] clusters)
+    {
+        List<String> clustersList = new ArrayList();
+
+        for(String cluster : clusters)
+            clustersList.add(sortClusterRow(cluster));
+        //Lista posortowana malejąco
+        Collections.sort(clustersList, new StringLengthComparator());
+
+        //Walidacja
+        for(String cluster : clustersList) {
+            Set<String> walidatedCluster = wordsToSet(cluster);
+            Boolean isValidCluster = false;
+
+            for(String clusterer : clustersList) {
+                if(clusterer.equals(cluster))
+                    continue;
+
+                Set<String> lookedAtCluster = wordsToSet(clusterer);
+                if(walidatedCluster.containsAll(lookedAtCluster) || lookedAtCluster.containsAll(walidatedCluster)) {
+                    isValidCluster = true;
+                    break;
+                }
+            }
+            if(!isValidCluster)
+                return null;
+        }
+
+        //Tworzenie klastra
+        ClusterFamily clusterFamily = new ClusterFamily();
+        for(String cluster : clustersList)
+            clusterFamily.add(cluster);
+
+        return clusterFamily;
     }
 
     public static int countRF(ClusterFamily first, ClusterFamily second) {
@@ -145,5 +185,11 @@ public class ClusterUtils {
                 sumRF++;
 
         return sumRF/2;
+    }
+
+    private static HashSet<String> wordsToSet(String words) {
+        HashSet<String> set = new HashSet();
+        set.addAll(Arrays.asList(words.split(" ")));
+        return set;
     }
 }
