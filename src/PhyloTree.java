@@ -182,6 +182,7 @@ public class PhyloTree {
         }
 
         RootedTree mergedTree = null;
+        /*
         for(RootedTree rootedTree : treesArray) {
             if(rootedTree == null)
                 continue;
@@ -190,8 +191,9 @@ public class PhyloTree {
             if(mergedTree == null)
                 mergedTree = new RootedTree(cluster);
             else
-                mergedTree = new RootedTree(ClusterUtils.mergeTwoClusters(mergedTree.getCluster(), rootedTree.getCluster()));
-        }
+            {mergedTree = new RootedTree(ClusterUtils.mergeTwoClusters(mergedTree.getCluster(), rootedTree.getCluster()));
+        }*/
+        mergedTree = new RootedTree(ClusterUtils.mergeTwoClusters(treesArray,value/100));
 
         treesArray[index] = mergedTree;
         if(mergedTree == null)
