@@ -1,5 +1,6 @@
 package tree.utils;
 
+import tree.rooted.RootedTree;
 import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Node;
 import tree.rooted.tree.Tree;
@@ -28,6 +29,41 @@ public class ClusterUtils {
             }
         }
        return mergedCluster;
+    }
+
+    public static ClusterFamily mergeTwoClusters(RootedTree[] tab, float precent) {
+        ClusterFamily mergedCluster = new ClusterFamily();
+
+        int counter = 0;
+        //add all equals clusters
+        for (RootedTree tree : tab) {
+            if (tree == null ) continue;
+            for(String cluster: tree.getCluster().getTrivialClusters()){
+                mergedCluster.add(sortClusterRow(cluster));
+            }
+            counter++;
+        }
+
+        /// wrzucamy wszytki klastry i zliczamy wystapienia
+        Map<String, Integer> map = new HashMap<>();
+        for (String s : mergedCluster.getTrivialClusters()){
+            if(map.containsKey(s))
+                map.replace(s,map.get(s)+1);
+            else
+                map.put(s,1);
+        }
+
+        for (String s : mergedCluster.getTrivialClusters())
+        {
+            if(map.get(s) / counter > precent)
+                ;
+            else
+                s = "";
+        }
+
+        //TODO // sprawdzic czy klastry wyszly poprawne tak jak przy wczytywaniu
+
+        return mergedCluster;
     }
 
     private static boolean clustersAreTheSame(String first, String second) {
