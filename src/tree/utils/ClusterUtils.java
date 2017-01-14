@@ -3,7 +3,7 @@ package tree.utils;
 import tree.rooted.RootedTree;
 import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Node;
-import tree.rooted.tree.Tree;
+import tree.rooted.tree.DirectedTree;
 import tree.rooted.cluster.ClusterFamily;
 import tree.utils.comparators.StringLengthComparator;
 import tree.utils.comparators.StringValueComparator;
@@ -115,7 +115,7 @@ public class ClusterUtils {
         }
     }
 
-    public static Tree convertClusterToTree(ClusterFamily mergedCluster) {
+    public static DirectedTree convertClusterToTree(ClusterFamily mergedCluster) {
 
         ArrayList<String> tab = new ArrayList<>(mergedCluster.getTrivialClusters());
         tab.sort(new StringLengthComparator());
@@ -126,7 +126,7 @@ public class ClusterUtils {
         removeNodeCoverdByChildren(root);
         makeLeavesFromNodes(root);
 
-        return new Tree(root);
+        return new DirectedTree(root);
     }
 
     private static void makeLeavesFromNodes(Node root) {

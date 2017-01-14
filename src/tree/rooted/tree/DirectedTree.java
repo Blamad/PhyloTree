@@ -8,11 +8,11 @@ import java.util.Collections;
 /**
  * Created by Blamad on 18.12.2016.
  */
-public class Tree {
+public class DirectedTree {
 
     private Node rootNode;
 
-    public Tree(Node rootNode)
+    public DirectedTree(Node rootNode)
     {
         this.rootNode = rootNode;
     }

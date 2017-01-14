@@ -3,7 +3,7 @@ package tree.utils;
 import tree.rooted.cluster.ClusterFamily;
 import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Node;
-import tree.rooted.tree.Tree;
+import tree.rooted.tree.DirectedTree;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import java.util.List;
  */
 public class TreeUtils {
 
-    public static Tree copyTree(Tree tree)
+    public static DirectedTree copyTree(DirectedTree directedTree)
     {
-        Node node = tree.getRootNode().clone();
-        return new Tree(node);
+        Node node = directedTree.getRootNode().clone();
+        return new DirectedTree(node);
     }
 
     private static void deepCopy(Node node, Node copy)
@@ -28,15 +28,15 @@ public class TreeUtils {
         }
     }
 
-    public static Tree pruneTreeLeavingLeaves(Tree tree, List<String> leaves)
+    public static DirectedTree pruneTreeLeavingLeaves(DirectedTree directedTree, List<String> leaves)
     {
-        Node newRoot = tree.getRootNode().clone();
-        Tree prunedTree = new Tree(newRoot);
+        Node newRoot = directedTree.getRootNode().clone();
+        DirectedTree prunedDirectedTree = new DirectedTree(newRoot);
 
-        pruneTree(tree.getRootNode(), newRoot, leaves);
+        pruneTree(directedTree.getRootNode(), newRoot, leaves);
         cleanUpStructure(newRoot);
 
-        return prunedTree;
+        return prunedDirectedTree;
     }
 
     //Sprzatamy wiszace galezie bez lisci, bezsensowne przedluzenia galezi itp.
@@ -101,10 +101,10 @@ public class TreeUtils {
         }
     }
 
-    public static ClusterFamily convertTreeToCluster(Tree tree) {
+    public static ClusterFamily convertTreeToCluster(DirectedTree directedTree) {
         ClusterFamily cluster = new ClusterFamily();
 
-        Node node = tree.getRootNode();
+        Node node = directedTree.getRootNode();
         if (node != null) {
             getAllNodes(node, cluster);
         }

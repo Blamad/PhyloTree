@@ -1,11 +1,5 @@
 package tree.utils;
 
-import org.forester.phylogeny.Phylogeny;
-import tree.rooted.RootedTree;
-import tree.rooted.tree.Tree;
-import tree.exporter.NewickTreeExporter;
-import tree.rooted.cluster.ClusterFamily;
-
 /**
  * Created by baton on 1/8/2017.
  */
@@ -13,7 +7,7 @@ public class ClusterUtilsTest {
 
     /*@org.junit.Test
     public void testMergeTwoClusters() throws Exception {
-        Tree t1, t2;
+        DirectedTree t1, t2;
         String s = "(A,((B,C),D))R;";
         t1 = NewickTreeExporter.importRootedTree(s);
        // t1.print();
@@ -30,34 +24,34 @@ public class ClusterUtilsTest {
         System.out.println("PO ZLACZENIU");
         mergedCluster.print();
         System.out.println("Zamiana na drzewo");
-        Tree mergedTree = ClusterUtils.convertClusterToTree(mergedCluster);
+        DirectedTree mergedTree = ClusterUtils.convertClusterToTree(mergedCluster);
 
     }
 
     /*
     @org.junit.Test
     public void testConvertTrivialClusterToTree() throws Exception {
-        Tree t1;
+        DirectedTree t1;
         //String s = "(A,(B,C,D))R;";
         String s = "(C,(B,(A,(D,E))))R;";
         t1 = NewickTreeExporter.importRootedTree(s);
         t1.print();
         System.out.println(s);
         System.out.println("Zamiana na drzewo");
-        Tree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
+        DirectedTree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
         mergedTree.print();
     }
 
     @org.junit.Test
     public void testConvertTrivialClusterToTree2() throws Exception {
-        Tree t1;
+        DirectedTree t1;
         //String s = "(A,(B,C,D))R;";
         String s = "(((F,G)D,(J,(N,L)K,T)E)B,((X,Y,S)H,(W,V,M)I)C)A;";
         t1 = NewickTreeExporter.importRootedTree(s);
         t1.print();
         System.out.println(s);
         System.out.println("Zamiana na drzewo");
-        Tree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
+        DirectedTree mergedTree = ClusterUtils.convertClusterToTree(t1.transformToTrivialCluster());
         mergedTree.print();
     }
     */

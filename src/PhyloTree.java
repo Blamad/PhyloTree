@@ -4,7 +4,7 @@
 
 import forester.Forester;
 import tree.rooted.RootedTree;
-import tree.rooted.tree.Tree;
+import tree.rooted.tree.DirectedTree;
 import tree.utils.ClusterUtils;
 import tree.utils.TreeUtils;
 import tree.exporter.NewickTreeExporter;
@@ -155,7 +155,7 @@ public class PhyloTree {
             return;
         }
         treesArray[index] = null;
-        System.out.println("Tree removed.");
+        System.out.println("DirectedTree removed.");
     }
 
     private void countRF() {
@@ -219,8 +219,8 @@ public class PhyloTree {
         }
 
         String[] leaves = input.substring(2).split(",");
-        Tree prunedTree = TreeUtils.pruneTreeLeavingLeaves(treesArray[index].getTree(), Arrays.asList(leaves));
-        prunedTree.print();
+        DirectedTree prunedDirectedTree = TreeUtils.pruneTreeLeavingLeaves(treesArray[index].getDirectedTree(), Arrays.asList(leaves));
+        prunedDirectedTree.print();
     }
 
     private void drawForester() {
@@ -254,7 +254,7 @@ public class PhyloTree {
                 treesArray[index].getCluster().print();
                 break;
             case 't':
-                treesArray[index].getTree().print();
+                treesArray[index].getDirectedTree().print();
                 break;
             default:
                 System.out.println("Uknown print type");
@@ -271,8 +271,8 @@ public class PhyloTree {
         }
 
         try {
-            Tree tree = NewickTreeExporter.importRootedTree(input);
-            treesArray[index] = new RootedTree(tree);
+            DirectedTree directedTree = NewickTreeExporter.importRootedTree(input);
+            treesArray[index] = new RootedTree(directedTree);
             newicks[index] = input;
             System.out.println("custom pattern loaded");
         } catch (PhyloTreeException e) {
@@ -302,8 +302,8 @@ public class PhyloTree {
 
             try
             {
-                Tree tree = NewickTreeExporter.importRootedTree(newick);
-                treesArray[treeIndex] = new RootedTree(tree);
+                DirectedTree directedTree = NewickTreeExporter.importRootedTree(newick);
+                treesArray[treeIndex] = new RootedTree(directedTree);
                 System.out.println(fileName + " loaded");
             }
             catch (PhyloTreeException e) {

@@ -1,7 +1,7 @@
 package tree.rooted;
 
 import tree.rooted.cluster.ClusterFamily;
-import tree.rooted.tree.Tree;
+import tree.rooted.tree.DirectedTree;
 import tree.utils.ClusterUtils;
 import tree.utils.TreeUtils;
 
@@ -10,14 +10,14 @@ import tree.utils.TreeUtils;
  */
 public class RootedTree {
 
-    private Tree tree;
+    private DirectedTree directedTree;
     private ClusterFamily cluster;
 
     private Boolean treeUpdate = false;
     private Boolean clusterUpdate = false;
 
-    public RootedTree(Tree tree) {
-        this.tree = tree;
+    public RootedTree(DirectedTree directedTree) {
+        this.directedTree = directedTree;
         this.clusterUpdate = true;
     }
 
@@ -34,18 +34,18 @@ public class RootedTree {
         this.treeUpdate = true;
     }
 
-    public Tree getTree() {
+    public DirectedTree getDirectedTree() {
         if(treeUpdate) {
             treeUpdate = false;
-            tree = ClusterUtils.convertClusterToTree(cluster);
+            directedTree = ClusterUtils.convertClusterToTree(cluster);
         }
-        return tree;
+        return directedTree;
     }
 
     public ClusterFamily getCluster() {
         if(clusterUpdate) {
             clusterUpdate = false;
-            cluster = TreeUtils.convertTreeToCluster(tree);
+            cluster = TreeUtils.convertTreeToCluster(directedTree);
         }
         return cluster;
     }
