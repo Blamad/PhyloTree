@@ -5,6 +5,8 @@ import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Node;
 import tree.rooted.tree.DirectedTree;
 import tree.rooted.cluster.ClusterFamily;
+import tree.unrooted.split.SplitFamily;
+import tree.unrooted.tree.Tree;
 import tree.utils.comparators.StringLengthComparator;
 import tree.utils.comparators.StringValueComparator;
 
@@ -246,5 +248,16 @@ public class ClusterUtils {
         HashSet<String> set = new HashSet();
         set.addAll(Arrays.asList(words.split(" ")));
         return set;
+    }
+
+    //////////////////////////////////////////////////
+    //                                              //
+    //              Unrooted tree stuff             //
+    //                                              //
+    //////////////////////////////////////////////////
+
+    public static Tree convertSplitToTree(SplitFamily split) {
+        //TODO
+        return new Tree(new HashSet());
     }
 }

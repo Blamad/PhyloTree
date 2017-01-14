@@ -8,12 +8,12 @@ import jebl.evolution.trees.SimpleRootedTree;
 import jebl.evolution.trees.SimpleTree;
 import tree.rooted.tree.DirectedTree;
 import tree.rooted.tree.Leaf;
+import tree.unrooted.tree.Tree;
 import utils.PhyloTreeException;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Blamad on 18.12.2016.
@@ -81,18 +81,47 @@ public class NewickTreeExporter {
         }
     }
 
-    public static DirectedTree importUnootedTree(String newick) throws PhyloTreeException {
-        DirectedTree directedTree = null;
+    //////////////////////////////////////////////////
+    //                                              //
+    //              Unrooted tree stuff             //
+    //                                              //
+    //////////////////////////////////////////////////
+
+    public static Tree importUnrootedTree(String newick) throws PhyloTreeException {
+        Tree tree = null;
 
         StringReader sr = new StringReader(newick);
         NewickImporter ni = new NewickImporter(sr, true);
 
         try {
-            SimpleTree srt = (SimpleTree) ni.importNextTree();
-            Set<Node> externalNodes = srt.getExternalNodes(); //liscie albo wierzcholki drzewa (tylko 1 polaczenie z reszta)
+            SimpleRootedTree st = (SimpleRootedTree) ni.importNextTree();
+            Set<Node> allNodes = st.getNodes();
 
-            //TODO jakas struktura z tego by sie przydala.
+            Map<Node, tree.unrooted.tree.Node> nodes = new HashMap();
+            String name = null;
 
+            for(Node node : allNodes) {
+                name = null;
+                if(st.getTaxon(node) != null)
+                    name = st.getTaxon(node).getName();
+
+                if(!nodes.containsKey(node))
+                    nodes.put(node, new tree.unrooted.tree.Node(name));
+                tree.unrooted.tree.Node ourNode = nodes.get(node);
+
+                List<Node> neighbours = st.getAdjacencies(node);
+                for(Node neighbour : neighbours) {
+                    name = null;
+                    if(st.getTaxon(neighbour) != null)
+                        name = st.getTaxon(neighbour).getName();
+                    if(!nodes.containsKey(neighbour))
+                        nodes.put(neighbour, new tree.unrooted.tree.Node(name));
+                    ourNode.addNeighbour(nodes.get(neighbour));
+                }
+            }
+
+            tree = new Tree(nodes.values());
+            tree.setTotallyNotRootNode(nodes.get(st.getRootNode()));
 
         } catch (IOException e) {
             throw new PhyloTreeException("Padam bo mogę.");
@@ -100,6 +129,6 @@ public class NewickTreeExporter {
             throw new PhyloTreeException("Podany łańcuch znaków nie spełnia wymagań formatu NEWICK!");
         }
 
-        return directedTree;
+        return tree;
     }
 }

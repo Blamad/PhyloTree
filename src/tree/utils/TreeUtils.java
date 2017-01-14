@@ -4,8 +4,13 @@ import tree.rooted.cluster.ClusterFamily;
 import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Node;
 import tree.rooted.tree.DirectedTree;
+import tree.unrooted.split.Split;
+import tree.unrooted.split.SplitFamily;
+import tree.unrooted.tree.Tree;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by Blamad on 19.12.2016.
@@ -135,5 +140,63 @@ public class TreeUtils {
                 preOrder(childNode, cluster);
             }
         }
+    }
+
+    //////////////////////////////////////////////////
+    //                                              //
+    //              Unrooted tree stuff             //
+    //                                              //
+    //////////////////////////////////////////////////
+
+    public static SplitFamily convertTreeToSplit(Tree tree, tree.unrooted.tree.Node startNode) {
+        SplitFamily splitFamily = new SplitFamily(startNode);
+        Split split;
+
+        List<tree.unrooted.tree.Node> nodes = new ArrayList();
+        nodes.addAll(tree.getNodes());
+        nodes.removeAll(tree.getExternalNodes()); //usuwamy wszystkie liscie
+
+        Stack<tree.unrooted.tree.Node> nodeStack = new Stack();
+        for(tree.unrooted.tree.Node node : startNode.getNeighbours())
+            if(!node.isExternal())
+                nodeStack.push(node);
+
+        tree.unrooted.tree.Node splitedNode;
+        //Liscie dla kazdego wezla.
+        List<tree.unrooted.tree.Node> externalNodes = new ArrayList();
+
+        while(!nodeStack.isEmpty()) {
+            split = new Split();
+            externalNodes.clear();
+            splitedNode = nodeStack.pop();
+
+            for(tree.unrooted.tree.Node node : splitedNode.getNeighbours()) {
+                if(node.isExternal())
+                    externalNodes.add(node);
+                else {
+                    split.addSubSet(getAllExternalNodes(node, splitedNode));
+                    nodeStack.push(node);
+                }
+            }
+            if(!externalNodes.isEmpty())
+                split.addSubSet(externalNodes);
+        }
+
+        return splitFamily;
+    }
+
+    private static List<tree.unrooted.tree.Node> getAllExternalNodes(tree.unrooted.tree.Node startNode, tree.unrooted.tree.Node previousNode) {
+        List<tree.unrooted.tree.Node> nodes = new ArrayList();
+        for(tree.unrooted.tree.Node node : startNode.getNeighbours()) {
+            if(node.equals(previousNode))
+                continue;
+
+            if(node.isExternal())
+                nodes.add(node);
+            else
+                nodes.addAll(getAllExternalNodes(node, startNode));
+        }
+
+        return nodes;
     }
 }

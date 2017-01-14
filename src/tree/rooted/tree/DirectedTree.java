@@ -1,7 +1,5 @@
 package tree.rooted.tree;
 
-import tree.rooted.cluster.ClusterFamily;
-
 import java.text.DecimalFormat;
 import java.util.Collections;
 

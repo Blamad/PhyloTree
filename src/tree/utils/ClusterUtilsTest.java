@@ -17,10 +17,10 @@ public class ClusterUtilsTest {
         RootedTree tree1 = new RootedTree(t1);
         RootedTree tree2 = new RootedTree(t2);
 
-        tree1.getCluster().print();
-        tree2.getCluster().print();
+        tree1.getSplit().print();
+        tree2.getSplit().print();
 
-        ClusterFamily mergedCluster = ClusterUtils.mergeTwoClusters(tree1.getCluster(), tree2.getCluster());
+        ClusterFamily mergedCluster = ClusterUtils.mergeTwoClusters(tree1.getSplit(), tree2.getSplit());
         System.out.println("PO ZLACZENIU");
         mergedCluster.print();
         System.out.println("Zamiana na drzewo");
