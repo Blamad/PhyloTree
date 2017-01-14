@@ -98,10 +98,10 @@ public class NewickTreeExporter {
             Set<Node> allNodes = st.getNodes();
 
             Map<Node, tree.unrooted.tree.Node> nodes = new HashMap();
-            String name = null;
+            String name;
 
             for(Node node : allNodes) {
-                name = null;
+                name = "";
                 if(st.getTaxon(node) != null)
                     name = st.getTaxon(node).getName();
 
@@ -111,7 +111,7 @@ public class NewickTreeExporter {
 
                 List<Node> neighbours = st.getAdjacencies(node);
                 for(Node neighbour : neighbours) {
-                    name = null;
+                    name = "";
                     if(st.getTaxon(neighbour) != null)
                         name = st.getTaxon(neighbour).getName();
                     if(!nodes.containsKey(neighbour))

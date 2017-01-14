@@ -152,14 +152,16 @@ public class TreeUtils {
         SplitFamily splitFamily = new SplitFamily(startNode);
         Split split;
 
-        List<tree.unrooted.tree.Node> nodes = new ArrayList();
-        nodes.addAll(tree.getNodes());
-        nodes.removeAll(tree.getExternalNodes()); //usuwamy wszystkie liscie
+        List<tree.unrooted.tree.Node> internalNodes = new ArrayList();
+        internalNodes.addAll(tree.getNodes());
+        internalNodes.removeAll(tree.getExternalNodes()); //usuwamy wszystkie liscie
 
         Stack<tree.unrooted.tree.Node> nodeStack = new Stack();
         for(tree.unrooted.tree.Node node : startNode.getNeighbours())
-            if(!node.isExternal())
+            if(!node.isExternal()) {
                 nodeStack.push(node);
+                internalNodes.remove(node);
+            }
 
         tree.unrooted.tree.Node splitedNode;
         //Liscie dla kazdego wezla.
@@ -167,6 +169,7 @@ public class TreeUtils {
 
         while(!nodeStack.isEmpty()) {
             split = new Split();
+            splitFamily.addSplit(split);
             externalNodes.clear();
             splitedNode = nodeStack.pop();
 
@@ -175,7 +178,10 @@ public class TreeUtils {
                     externalNodes.add(node);
                 else {
                     split.addSubSet(getAllExternalNodes(node, splitedNode));
-                    nodeStack.push(node);
+                    if(internalNodes.contains(node)) {
+                        nodeStack.push(node);
+                        internalNodes.remove(node);
+                    }
                 }
             }
             if(!externalNodes.isEmpty())

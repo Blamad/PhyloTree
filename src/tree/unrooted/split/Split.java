@@ -28,9 +28,9 @@ public class Split {
                 if(node.isExternal())
                     subSplit += ","+node;
             }
-            split += "|{"+ subSplit.substring(0) +"}";
+            split += "|{"+ subSplit.substring(1) +"}";
         }
 
-        return split.substring(0);
+        return split.substring(1);
     }
 }
