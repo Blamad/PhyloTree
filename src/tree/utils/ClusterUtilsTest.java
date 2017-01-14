@@ -15,10 +15,10 @@ public class ClusterUtilsTest {
     public void testMergeTwoClusters() throws Exception {
         Tree t1, t2;
         String s = "(A,((B,C),D))R;";
-        t1 = NewickTreeExporter.importTree(s);
+        t1 = NewickTreeExporter.importRootedTree(s);
        // t1.print();
         s = "(A,((D,C),B))R;";
-        t2 = NewickTreeExporter.importTree(s);
+        t2 = NewickTreeExporter.importRootedTree(s);
       //  t2.print();
         RootedTree tree1 = new RootedTree(t1);
         RootedTree tree2 = new RootedTree(t2);
@@ -40,7 +40,7 @@ public class ClusterUtilsTest {
         Tree t1;
         //String s = "(A,(B,C,D))R;";
         String s = "(C,(B,(A,(D,E))))R;";
-        t1 = NewickTreeExporter.importTree(s);
+        t1 = NewickTreeExporter.importRootedTree(s);
         t1.print();
         System.out.println(s);
         System.out.println("Zamiana na drzewo");
@@ -53,7 +53,7 @@ public class ClusterUtilsTest {
         Tree t1;
         //String s = "(A,(B,C,D))R;";
         String s = "(((F,G)D,(J,(N,L)K,T)E)B,((X,Y,S)H,(W,V,M)I)C)A;";
-        t1 = NewickTreeExporter.importTree(s);
+        t1 = NewickTreeExporter.importRootedTree(s);
         t1.print();
         System.out.println(s);
         System.out.println("Zamiana na drzewo");

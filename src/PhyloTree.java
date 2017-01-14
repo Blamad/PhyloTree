@@ -194,6 +194,10 @@ public class PhyloTree {
             {mergedTree = new RootedTree(ClusterUtils.mergeTwoClusters(mergedTree.getCluster(), rootedTree.getCluster()));
         }*/
         mergedTree = new RootedTree(ClusterUtils.mergeTwoClusters(treesArray,value/100));
+        if(mergedTree == null) {
+            System.out.println("Cannot merge clusters!");
+            return;
+        }
 
         treesArray[index] = mergedTree;
         if(mergedTree == null)
@@ -267,7 +271,7 @@ public class PhyloTree {
         }
 
         try {
-            Tree tree = NewickTreeExporter.importTree(input);
+            Tree tree = NewickTreeExporter.importRootedTree(input);
             treesArray[index] = new RootedTree(tree);
             newicks[index] = input;
             System.out.println("custom pattern loaded");
@@ -298,7 +302,7 @@ public class PhyloTree {
 
             try
             {
-                Tree tree = NewickTreeExporter.importTree(newick);
+                Tree tree = NewickTreeExporter.importRootedTree(newick);
                 treesArray[treeIndex] = new RootedTree(tree);
                 System.out.println(fileName + " loaded");
             }
@@ -332,6 +336,8 @@ public class PhyloTree {
                 case 5:
                     loadFromFile("res/tree_zyciowe.txt", treeIndex);
                     break;
+                case 6:
+                    loadFromFile("res/utree_1.txt", treeIndex);
                 default:
                     return false;
             }

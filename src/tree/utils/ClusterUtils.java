@@ -62,6 +62,10 @@ public class ClusterUtils {
         }
 
         //TODO // sprawdzic czy klastry wyszly poprawne tak jak przy wczytywaniu
+        List<String> clustersList = new ArrayList(mergedCluster.clusterNodes);
+
+        if(!validateCluster(clustersList))
+            return null;
 
         return mergedCluster;
     }
@@ -181,45 +185,9 @@ public class ClusterUtils {
 
         for(String cluster : clusters)
             clustersList.add(sortClusterRow(cluster));
-        //Lista posortowana malejąco
-        Collections.sort(clustersList, new StringLengthComparator());
 
-        //Walidacja
-        List<Set<String>> listOfSplitWorlds = new ArrayList();
-        for(String cluster : clustersList)
-            listOfSplitWorlds.add(wordsToSet(cluster));
-
-        for(int i = 0; i < listOfSplitWorlds.size(); i++) {
-            Set<String> walidatedCluster = listOfSplitWorlds.get(i);
-            Boolean isValidCluster = false;
-
-            for(int j = 0; j < listOfSplitWorlds.size(); j++) {
-                Set<String> lookedAtCluster = listOfSplitWorlds.get(j);
-                if(i == j)
-                    continue;
-
-                //Walidowany klaster jest nad przegladanym zbiorem a przegladany jest podzbiorem walidowanego
-                if(walidatedCluster.containsAll(lookedAtCluster) || lookedAtCluster.containsAll(walidatedCluster)) {
-                    isValidCluster = true;
-
-                    Set<String> toRemove = new HashSet<String>();
-                    for(String word : walidatedCluster)
-                        if(lookedAtCluster.contains(word))
-                            toRemove.add(word);
-
-                    walidatedCluster.removeAll(toRemove);
-                    lookedAtCluster.removeAll(toRemove);
-                    break;
-                }
-            }
-            if(!isValidCluster)
-                return null;
-        }
-
-        //Sprawdzamy czy wszystko mialo relacje
-        for(Set cluster : listOfSplitWorlds)
-            if(!cluster.isEmpty())
-                return null;
+        if(!validateCluster(clustersList))
+            return null;
 
         //Tworzenie klastra
         ClusterFamily clusterFamily = new ClusterFamily();
@@ -239,6 +207,39 @@ public class ClusterUtils {
                 sumRF++;
 
         return sumRF/2;
+    }
+
+    private static Boolean validateCluster(List<String> clustersList) {
+        //Lista posortowana malejąco
+        Collections.sort(clustersList, new StringLengthComparator());
+
+        //Walidacja NOWA
+        List<Set<String>> listOfSplitWorlds = new ArrayList();
+        for(String cluster : clustersList)
+            listOfSplitWorlds.add(wordsToSet(cluster));
+
+        for(int i = listOfSplitWorlds.size()-1; i >= 0 ; i--) {
+            Set<String> walidatedCluster = listOfSplitWorlds.get(i);
+            Boolean isValidCluster = false;
+
+            for(int j = i - 1; j >= 0; j--) {
+                Set<String> lookedAtCluster = listOfSplitWorlds.get(j);
+
+                //Walidowany klaster jest nad przegladanym zbiorem a przegladany jest podzbiorem walidowanego
+                if(lookedAtCluster.containsAll(walidatedCluster)) {
+                    isValidCluster = true;
+                    lookedAtCluster.removeAll(walidatedCluster);
+                }
+            }
+            if(isValidCluster)
+                walidatedCluster.clear();
+        }
+
+        //Sprawdzamy czy wszystko mialo relacje
+        for(Set cluster : listOfSplitWorlds)
+            if(!cluster.isEmpty())
+                return false;
+        return true;
     }
 
     private static HashSet<String> wordsToSet(String words) {

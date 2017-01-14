@@ -5,6 +5,7 @@ import jebl.evolution.graphs.Node;
 import jebl.evolution.io.ImportException;
 import jebl.evolution.io.NewickImporter;
 import jebl.evolution.trees.SimpleRootedTree;
+import jebl.evolution.trees.SimpleTree;
 import tree.rooted.tree.Leaf;
 import tree.rooted.tree.Tree;
 import utils.PhyloTreeException;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class NewickTreeExporter {
 
-    public static Tree importTree(String newick) throws PhyloTreeException
+    public static Tree importRootedTree(String newick) throws PhyloTreeException
     {
         Tree tree = null;
 
