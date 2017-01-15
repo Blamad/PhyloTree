@@ -169,7 +169,6 @@ public class TreeUtils {
 
         while(!nodeStack.isEmpty()) {
             split = new Split();
-            splitFamily.addSplit(split);
             externalNodes.clear();
             splitedNode = nodeStack.pop();
 
@@ -184,8 +183,10 @@ public class TreeUtils {
                     }
                 }
             }
-            if(!externalNodes.isEmpty())
+            if(!externalNodes.isEmpty()) {
+                splitFamily.addSplit(split);
                 split.addSubSet(externalNodes);
+            }
         }
 
         return splitFamily;

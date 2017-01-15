@@ -393,17 +393,18 @@ public class PhyloTree {
         if(!validateIndex(index))
             return;
 
+        if (unrootedTreesArray[index] == null) {
+            System.out.println("Empty tree slot under " + index);
+            return;
+        }
+
         String[] args = input.split(" ");
         if(args.length == 2) {
-           if (unrootedTreesArray[index] != null) {
-                SplitFamily split = unrootedTreesArray[index].getSplit(args[1]);
-                if(split != null)
-                    split.print();
-                else
-                    System.out.println("Cannot create split!");
-            }
+            SplitFamily split = unrootedTreesArray[index].getSplit(args[1]);
+            if(split != null)
+                split.print();
             else
-               System.out.println("Empty tree slot under " + index);
+                System.out.println("Cannot create split!");
         }
     }
 

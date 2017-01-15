@@ -30,7 +30,6 @@ public class Split {
             }
             split += "|{"+ subSplit.substring(1) +"}";
         }
-
         return split.substring(1);
     }
 }
