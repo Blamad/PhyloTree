@@ -289,10 +289,19 @@ public class PhyloTree {
             return;
 
         try {
-            DirectedTree directedTree = NewickTreeExporter.importRootedTree(input);
-            treesArray[index] = new RootedTree(directedTree);
+            if(ROOTED_MODE)
+            {
+                DirectedTree directedTree = NewickTreeExporter.importRootedTree(input);
+                treesArray[index] = new RootedTree(directedTree);
+                System.out.println("custom pattern loaded");
+            }
+            else
+            {
+                Tree tree = NewickTreeExporter.importUnrootedTree(input);
+                unrootedTreesArray[index] = new UnrootedTree(tree);
+                System.out.println("custom pattern loaded - unrooted");
+            }
             newicks[index] = input;
-            System.out.println("custom pattern loaded");
         } catch (PhyloTreeException e) {
             System.out.println("Given pattern is not a NEWICK tree format!");
         }
